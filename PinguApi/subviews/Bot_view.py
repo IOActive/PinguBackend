@@ -30,7 +30,7 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
         by filtering against a `username` query parameter in the URL.
         """
         queryset = Bot.objects.all()
-        name = self.request.query_params.get('bot_name')
+        bot_name = self.request.query_params.get('bot_name')
         id = self.request.query_params.get('id')
         if name is not None and id is not None:
             queryset = queryset.filter(bot_name=bot_name, id=id)

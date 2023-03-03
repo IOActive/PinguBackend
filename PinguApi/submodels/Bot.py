@@ -17,13 +17,13 @@ class Bot(models.Model):
     bot_name = models.CharField(max_length=40, unique=True)
 
     # Time of the last heartbeat.
-    last_beat_time = models.DateTimeField()
+    last_beat_time = models.DateField()
 
     # Task payload containing information on current task execution.
     task_payload = models.CharField(max_length=200)
 
     # Expected end time for task.
-    task_end_time = models.DateTimeField()
+    task_end_time = models.DateField()
 
     # Tasks status
     task_status = models.CharField(

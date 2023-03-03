@@ -3,7 +3,6 @@ from PinguApi.submodels.TestCase import TestCase
 from PinguApi.submodels.DataBundle import DataBundle
  
 class DataBundleSerializer(serializers.ModelSerializer):
-    testcase = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = DataBundle
         fields = ('id',

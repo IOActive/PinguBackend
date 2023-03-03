@@ -11,6 +11,7 @@ class FuzzTargetJobSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'fuzzing_target',
                   'job',
+                  'engine',
                   'weight',
                   'last_run'
                   )

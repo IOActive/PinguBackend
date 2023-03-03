@@ -14,3 +14,4 @@ from PinguApi.submodels.Statistic import Statistic
 from PinguApi.submodels.TestCaseVariant import TestCaseVariant
 from PinguApi.submodels.Trial import Trial
 from PinguApi.submodels.DataBundle import DataBundle
+from PinguApi.submodels.Crash import Crash
