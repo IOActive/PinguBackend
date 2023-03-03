@@ -36,7 +36,7 @@ class TestCase(models.Model):
     triaged = models.BooleanField(default=False)
     # Whether testcase has a bug (either bug_information or group_bug_information).
     has_bug_flag = models.BooleanField(default=False)
-    open = models.BooleanField(default=True)
+    opened = models.BooleanField(default=True)
 
     # store paths for various things like original testcase, minimized
     # testcase, etc.
