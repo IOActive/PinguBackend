@@ -20,7 +20,7 @@ class TestCaseSerializer(serializers.ModelSerializer):
                   'status',
                   'triaged',
                   'has_bug_flag',
-                  'opened',
+                  'open',
                   'testcase_path',
                   'additional_metadata',
                   'fuzzed_keys',
