@@ -1,6 +1,9 @@
 from django.db import models
-
+import uuid
 class Trial(models.Model):
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
     # App name that this trial is applied to. E.g. "d8" or "chrome".
     app_name = models.CharField(max_length=50)
 

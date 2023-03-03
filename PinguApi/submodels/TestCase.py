@@ -3,6 +3,7 @@ from enum import Enum
 from django.db import models
 from PinguApi.submodels.Job import Job
 from PinguApi.submodels.Fuzzer import Fuzzer
+import uuid
 
 
 class TestCase(models.Model):
@@ -11,7 +12,10 @@ class TestCase(models.Model):
         ONGOING = 'processed'
         UNREPRODUCIBLE = 'unreproducible'
         DONE = 'done'
-        
+    
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
     bug_information = models.CharField(max_length=500)
 
     # Testcase file

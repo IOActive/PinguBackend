@@ -1,5 +1,6 @@
 from enum import Enum
 from django.db import models
+import uuid
 
 class Bot(models.Model):
     class TaskStatus(models.TextChoices):
@@ -8,7 +9,9 @@ class Bot(models.Model):
         FINISHED = 'finished'
         ERROR = 'errored out'
         NA = 'NA'
-        
+    
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     """Bot health metadata."""
     # Name of the bot.
     bot_name = models.CharField(max_length=40, unique=True)

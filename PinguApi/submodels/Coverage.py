@@ -1,9 +1,12 @@
 import datetime
 from django.db import models
 from PinguApi.submodels.TestCase import TestCase
+import uuid
 
 class Coverage(models.Model):
     """Coverage info."""
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date = models.DateField()
     fuzzer = models.CharField(max_length=50)
 

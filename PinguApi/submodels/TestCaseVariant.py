@@ -1,6 +1,7 @@
 from django.db import models
 from PinguApi.submodels.Job import Job
 from PinguApi.submodels.TestCase import TestCase
+import uuid
 
 class TestCaseVariant(models.Model):
     
@@ -9,7 +10,9 @@ class TestCaseVariant(models.Model):
         REPRODUCIBLE = 1
         FLAKY = 2
         UNREPRODUCIBLE = 3
-        
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
     # Status of the testcase variant (pending, reproducible, unreproducible, etc).
     status = models.IntegerField(
         choices=TestcaseVariantStatus.choices,

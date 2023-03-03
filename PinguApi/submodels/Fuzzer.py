@@ -1,8 +1,11 @@
 import re
 from django.db import models
+import uuid
 
 
 class Fuzzer(models.Model):
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Additionally allows '.' and '@' over NAME_CHECK_REGEX.
     VALID_NAME_REGEX = re.compile(r'^[a-zA-Z0-9_@.-]+$')
     # Last update time.

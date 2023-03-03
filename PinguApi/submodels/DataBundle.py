@@ -1,7 +1,10 @@
 from django.db import models
+import uuid
 
 class DataBundle(models.Model):
     VALID_NAME_REGEX = models.CharField(max_length=100, blank=True, null=True, default="")
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # The data bundle's name (important for identifying shared bundles).
     name = models.CharField(max_length=50)
 

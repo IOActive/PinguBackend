@@ -1,7 +1,10 @@
 from django.db import models
 from PinguApi.submodels.Job import Job
+import uuid
 
 class Statistic(models.Model):
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     job_id = models.ForeignKey(to=Job, on_delete=models.CASCADE)
     iteration = models.IntegerField()
     runtime = models.IntegerField()
