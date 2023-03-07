@@ -7,12 +7,14 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from PinguApi.submodels.Bot import Bot
 
 class BotTests(APITestCase):
     def setUp(self):
         self.user = self.setup_user()
         self.token = Token.objects.get_or_create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token[0].key)
+        self.test_bot = self.init_test_bot()
 
     @staticmethod
     def setup_user():
@@ -22,12 +24,21 @@ class BotTests(APITestCase):
             email='testuser@test.com',
             password='test'
         )
+        
+    def init_test_bot(self):
+        bot = {'bot_name': "test_bot",
+               'task_payload': "task_payload",
+               'task_end_time': datetime.now().strftime('%Y-%m-%d'),
+               'last_beat_time': datetime.now().strftime('%Y-%m-%d'),
+               'platform': "Linux"}
+        bot_object = Bot.objects.create(**bot)
+        bot_object.save()
+        return bot_object
             
     def test_register(self):
-        bot = {'bot_name': "test_bot",
-               'current_time': datetime.now().strftime('%Y-%m-%d'),
+        bot = {'bot_name': "test_bot2",
                'task_payload': "task_payload",
-               'task_end_time': "2022-05-21",
+               'task_end_time': datetime.now().strftime('%Y-%m-%d'),
                'last_beat_time': datetime.now().strftime('%Y-%m-%d'),
                'platform': "Linux"}
         
@@ -55,6 +66,7 @@ class BotTests(APITestCase):
             "last_beat_time": datetime.now().strftime('%Y-%m-%d'),
             "task_status": "started"
         }
-        response = self.client.patch(f'/api/bot/2188c36f-4d88-4060-8f03-60226fa452b1/', json=heartbeat, format=json)
+        
+        response = self.client.patch(f'/api/bot/{self.test_bot.id}/', json=heartbeat, format=json)
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
