@@ -15,8 +15,8 @@ urlpatterns = [
     path("coverage/", views.Coverage_List_Create_APIView().as_view(), name='Coverage List Create'),
     path('coverage/<uuid:pk>/', views.Coverage_Update_Delete_APIView().as_view(), name="Coverage update/delete"),
     
-    path("buildmetada/", views.BuildMetadata_List_Create_APIView().as_view(), name='Buildmetada List Create'),
-    path('buildmetada/<uuid:pk>/', views.BuildMetadata_Update_Delete_APIView().as_view(), name="Buildmetada update/delete"),
+    path("buildmetadata/", views.BuildMetadata_List_Create_APIView().as_view(), name='Buildmetada List Create'),
+    path('buildmetadata/<uuid:pk>/', views.BuildMetadata_Update_Delete_APIView().as_view(), name="Buildmetada update/delete"),
     
     path("databundle/", views.DataBundle_List_Create_APIView.as_view(), name='Databundle List Create'),
     path('databundle/<uuid:pk>/', views.DataBundle_Update_Delete_APIView.as_view(), name="Databundle update/delete"),

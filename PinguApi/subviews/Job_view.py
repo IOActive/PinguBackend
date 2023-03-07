@@ -11,6 +11,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
+from PinguApi.utils import EnablePartialUpdateMixin
 
 class Job_List_Create_APIView(generics.mixins.ListModelMixin, 
                       generics.mixins.CreateModelMixin,
@@ -47,7 +48,7 @@ class Job_List_Create_APIView(generics.mixins.ListModelMixin,
         return self.create(request, *args, **kwargs)
 
 
-class Job_Update_Delete_APIView(generics.mixins.UpdateModelMixin, 
+class Job_Update_Delete_APIView(EnablePartialUpdateMixin, 
                       generics.mixins.DestroyModelMixin,
                       generics.GenericAPIView):
     
@@ -60,7 +61,7 @@ class Job_Update_Delete_APIView(generics.mixins.UpdateModelMixin,
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
 
