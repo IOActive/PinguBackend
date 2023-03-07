@@ -1,5 +1,6 @@
 from django.urls import path 
 from PinguApi import views 
+from rest_framework.authtoken import views as rest_framework_views
 
 urlpatterns = [
     path(r'swagger.json', views.schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -47,5 +48,6 @@ urlpatterns = [
     path("crash/", views.Crash_List_Create_APIView.as_view(), name='Crash List Create'),
     path('crash/<uuid:pk>/', views.Crash_Update_Delete_APIView.as_view(), name="Crash update/delete"),
     
-    path('api-token-auth/', views.CustomAuthToken.as_view())
+    path('api-token-auth/', rest_framework_views.obtain_auth_token)
+
 ]
