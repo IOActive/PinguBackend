@@ -37,8 +37,7 @@ class BotTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_get_bots(self):
-        response = self.client.get(f'/api/bot/', format='json')
-        response = self.client.get(reverse('user-detail', args=[self.user.id]))
+        response = self.client.get(f'/api/bot/')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(len(result) > 0)
