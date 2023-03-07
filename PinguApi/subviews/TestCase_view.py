@@ -32,13 +32,10 @@ class TestCase_List_Create_APIView(generics.mixins.ListModelMixin,
         """
         queryset = TestCase.objects.all()
         job_id = self.request.query_params.get('job_id')
-        id = self.request.query_params.get('id')
-        if name is not None and id is not None:
-            queryset = queryset.filter(job_id=job_id, id=id)
-        elif name is not None:
-            queryset = queryset.filter(job_id=job_id)
-        elif id is not None:
-            queryset = queryset.filter(id=id)
+        _id = self.request.query_params.get('id')
+        if _id is not None:
+            queryset = queryset.filter(id=_id)
+        return queryset
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

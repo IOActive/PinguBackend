@@ -67,14 +67,10 @@ class BuildMetadataTests(APITestCase):
         
     def test_update_BuildMetadata(self):
         buildmetadata_update = {
-            "revision": 1,
-            "bad_build": False,
-            "console_output": "dadsa",
-            "bot_name": "test_bot",
-            "symbols": "dasdad",
-            "timestamp": datetime.now().strftime('%Y-%m-%d')
+            "revision": 2
         }
         
-        response = self.client.patch(f'/api/buildmetadata/{self.test_BuildMetadata.id}/', json=buildmetadata_update, format=json)
+        response = self.client.patch(f'/api/buildmetadata/{self.test_BuildMetadata.id}/', data=buildmetadata_update, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(result['revision'], 2)

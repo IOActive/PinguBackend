@@ -20,4 +20,4 @@ class FuzzTargetJob(models.Model):
     weight = models.FloatField(default=1.0)
 
     # Approximate last time this target was run.
-    last_run = models.DateField()
+    last_run = models.DateTimeField()

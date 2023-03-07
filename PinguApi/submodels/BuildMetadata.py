@@ -26,5 +26,5 @@ class BuildMetadata(models.Model):
     symbols =  models.CharField(max_length=20000, blank=True, default='', null=True)
 
     # Creation timestamp.
-    timestamp = models.DateField()
+    timestamp = models.DateTimeField()
 

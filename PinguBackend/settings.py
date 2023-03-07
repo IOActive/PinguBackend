@@ -68,7 +68,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated', ),
      'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'TEST_REQUEST_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer']
+        'rest_framework.renderers.JSONRenderer'],
+    'DATE_INPUT_FORMATS': ["%Y-%m-%dT%H:%M:%S.%f", ]
 }
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -140,6 +141,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%f'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

@@ -7,7 +7,7 @@ class Coverage(models.Model):
     """Coverage info."""
     # UUID
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.DateField()
+    date = models.DateTimeField()
     fuzzer = models.CharField(max_length=50)
 
     # Function coverage information.

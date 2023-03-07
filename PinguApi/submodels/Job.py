@@ -11,7 +11,7 @@ class Job(models.Model):
     # Project name.
     project = models.CharField(max_length=50)
     # Creation date
-    date = models.DateField()
+    date = models.DateTimeField()
     # Enable state
     enabled = models.BooleanField(default=True)
     # Archive state

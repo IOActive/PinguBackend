@@ -8,7 +8,7 @@ class Crash(models.Model):
     testcase_id = models.ForeignKey(to=TestCase, on_delete=models.CASCADE)
     crash_signal = models.IntegerField()
     exploitability = models.CharField(max_length=50)
-    crash_time = models.DateField()
+    crash_time = models.DateTimeField()
     crash_hash = models.CharField(max_length=512)
     verified = models.BooleanField(default=False)
     additional  = models.CharField(max_length=200)

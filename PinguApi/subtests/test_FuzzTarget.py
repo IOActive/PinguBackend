@@ -7,14 +7,14 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from PinguApi.submodels.Bot import Bot
+from PinguApi.submodels.FuzzTarget import FuzzTarget
 
-class BotTests(APITestCase):
+class FuzzTargetTests(APITestCase):
     def setUp(self):
         self.user = self.setup_user()
         self.token = Token.objects.get_or_create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token[0].key)
-        self.test_bot = self.init_test_bot()
+        self.test_FuzzTarget = self.init_test_FuzzTarget()
 
     @staticmethod
     def setup_user():
@@ -25,48 +25,44 @@ class BotTests(APITestCase):
             password='test'
         )
         
-    def init_test_bot(self):
-        bot = {'bot_name': "test_bot",
-               'task_payload': "task_payload",
-               'task_end_time': datetime.now().strftime('%Y-%m-%d'),
-               'last_beat_time': datetime.now().strftime('%Y-%m-%d'),
-               'platform': "Linux"}
-        bot_object = Bot.objects.create(**bot)
-        bot_object.save()
-        return bot_object
+    def init_test_FuzzTarget(self):
+        fuzztarget = {
+            "project": "test_project",
+            "binary": "sadad"
+        }
+        FuzzTarget_object = FuzzTarget.objects.create(**fuzztarget)
+        FuzzTarget_object.save()
+        return FuzzTarget_object
             
-    def test_register(self):
-        bot = {'bot_name': "test_bot2",
-               'task_payload': "task_payload",
-               'task_end_time': datetime.now().strftime('%Y-%m-%d'),
-               'last_beat_time': datetime.now().strftime('%Y-%m-%d'),
-               'platform': "Linux"}
+    def test_create_FuzzTargets(self):
+        fuzztarget = {
+            "project": "test_project",
+            "binary": "sadad"
+        }
         
-        response = self.client.put(f'/api/bot/', data=bot, format='json')
+        response = self.client.put(f'/api/fuzztarget/', data=fuzztarget, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
-    def test_get_bots(self):
-        response = self.client.get(f'/api/bot/')
+    def test_get_FuzzTargets(self):
+        response = self.client.get(f'/api/fuzztarget/')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(len(result) > 0)
 
-    def test_get_bot(self):
-        bot_name = 'test_bot'
-        response = self.client.get(f'/api/bot/?bot_name={bot_name}')
+    def test_get_FuzzTarget(self):
+        response = self.client.get(f'/api/fuzztarget/?id={self.test_FuzzTarget.id}')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(len(result) > 0)
         
-    def test_heartbeat(self):
-        heartbeat = {
-            "bot_name": "test_bot",
-            "last_beat_time": datetime.now().strftime('%Y-%m-%d'),
-            "task_status": "started"
+    def test_update_FuzzTarget(self):
+        fuzztarget_update = {
+            "project": "test_project2",
         }
         
-        response = self.client.patch(f'/api/bot/{self.test_bot.id}/', json=heartbeat, format=json)
+        response = self.client.patch(f'/api/fuzztarget/{self.test_FuzzTarget.id}/', data=fuzztarget_update, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(result['project'], "test_project2")

@@ -1,6 +1,7 @@
 from enum import Enum
 from django.db import models
 import uuid
+from django.conf import settings 
 
 class Bot(models.Model):
     class TaskStatus(models.TextChoices):

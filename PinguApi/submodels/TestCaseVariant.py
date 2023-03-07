@@ -5,7 +5,7 @@ import uuid
 
 class TestCaseVariant(models.Model):
     
-    class TestcaseVariantStatus(models.TextChoices):
+    class TestcaseVariantStatus(models.Choices):
         PENDING = 0
         REPRODUCIBLE = 1
         FLAKY = 2

@@ -82,10 +82,10 @@ class CoverageTests(APITestCase):
         
     def test_update_Coverage(self):
         coverage_update = {
-            "revision": 2,
+            "quarantine_location": "world",
         }
         
-        response = self.client.patch(f'/api/coverage/{self.test_Coverage.id}/', json=coverage_update, format=json)
+        response = self.client.patch(f'/api/coverage/{self.test_Coverage.id}/', data=coverage_update, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(result['revision'], 2)
+        self.assertEqual(result['quarantine_location'], "world")
