@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'PinguApi.apps.PinguapiConfig',
     'rest_framework.authtoken',
     'django_filters',
-    'drf_yasg',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -69,7 +69,10 @@ REST_FRAMEWORK = {
      'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'TEST_REQUEST_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer'],
-    'DATE_INPUT_FORMATS': ["%Y-%m-%dT%H:%M:%S.%f", ]
+    'DATE_INPUT_FORMATS': ["%Y-%m-%dT%H:%M:%S.%f", ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ]
 }
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -152,3 +155,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+QUEUE_HOST = 'localhost'
+CELERY_BROKER_URL = 'amqp://localhost'

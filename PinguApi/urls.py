@@ -48,6 +48,8 @@ urlpatterns = [
     path("crash/", views.Crash_List_Create_APIView.as_view(), name='Crash List Create'),
     path('crash/<uuid:pk>/', views.Crash_Update_Delete_APIView.as_view(), name="Crash update/delete"),
     
-    path('api-token-auth/', rest_framework_views.obtain_auth_token)
+    path('api-token-auth/', rest_framework_views.obtain_auth_token),
+    
+    path('task/', views.Task_APIView.as_view(), name='Task Add/Fetch')
 
 ]

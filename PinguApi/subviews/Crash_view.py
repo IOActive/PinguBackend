@@ -11,7 +11,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-from PinguApi.utils import EnablePartialUpdateMixin
+from PinguApi.utils.EnablePartialUpdateMixin import EnablePartialUpdateMixin
 
 class Crash_List_Create_APIView(generics.mixins.ListModelMixin, 
                       generics.mixins.CreateModelMixin,
