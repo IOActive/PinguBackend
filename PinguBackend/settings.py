@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'rest_framework',
     # CORS
     'corsheaders',
-    'PinguApi.apps.PinguapiConfig'
+    'PinguApi.apps.PinguapiConfig',
+    'rest_framework.authtoken',
+    'django_filters',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -54,8 +57,23 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # CORS
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware'
+    'django.middleware.common.CommonMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated', ),
+     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'TEST_REQUEST_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer'],
+    'DATE_INPUT_FORMATS': ["%Y-%m-%dT%H:%M:%S.%f", ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ]
+}
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
@@ -126,6 +144,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%f'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -136,3 +155,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+QUEUE_HOST = 'localhost'
+CELERY_BROKER_URL = 'amqp://localhost'

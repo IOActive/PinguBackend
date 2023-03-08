@@ -1,10 +1,13 @@
 import datetime
 from django.db import models
 from PinguApi.submodels.TestCase import TestCase
+import uuid
 
 class Coverage(models.Model):
     """Coverage info."""
-    date = models.DateField()
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date = models.DateTimeField()
     fuzzer = models.CharField(max_length=50)
 
     # Function coverage information.

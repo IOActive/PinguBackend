@@ -1,7 +1,10 @@
 from django.db import models
+import uuid
 
 class DataBundle(models.Model):
     VALID_NAME_REGEX = models.CharField(max_length=100, blank=True, null=True, default="")
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # The data bundle's name (important for identifying shared bundles).
     name = models.CharField(max_length=50)
 
@@ -15,7 +18,7 @@ class DataBundle(models.Model):
     is_local = models.BooleanField(default=True)
 
     # Creation timestamp.
-    timestamp = models.DateField()
+    timestamp = models.DateTimeField()
 
     # Whether or not bundle should be synced to worker instead.
     # Fuzzer scripts are usually run on trusted hosts, so data bundles are synced

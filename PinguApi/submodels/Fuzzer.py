@@ -1,12 +1,15 @@
 import re
 from django.db import models
+import uuid
 
 
 class Fuzzer(models.Model):
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Additionally allows '.' and '@' over NAME_CHECK_REGEX.
     VALID_NAME_REGEX = re.compile(r'^[a-zA-Z0-9_@.-]+$')
     # Last update time.
-    timestamp = models.DateField()
+    timestamp = models.DateTimeField()
     # Fuzzer Name.
     name = models.CharField(max_length=50, unique=True)
 
@@ -38,7 +41,7 @@ class Fuzzer(models.Model):
     result = models.CharField(max_length=500, default="")
 
     # Last result update timestamp.
-    result_timestamp = models.DateField()
+    result_timestamp = models.DateTimeField()
 
     # Console output from last fuzzer run.
     console_output = models.CharField(max_length=500, default="")

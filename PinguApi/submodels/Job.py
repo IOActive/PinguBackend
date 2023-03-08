@@ -1,7 +1,9 @@
 from django.db import models
 from PinguApi.submodels.JobTemplate import JobTemplate
-
+import uuid
 class Job(models.Model):
+    # UUID
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Job type name.
     name = models.CharField(max_length=50)
     # Description of the job.
@@ -9,7 +11,7 @@ class Job(models.Model):
     # Project name.
     project = models.CharField(max_length=50)
     # Creation date
-    date = models.DateField()
+    date = models.DateTimeField()
     # Enable state
     enabled = models.BooleanField(default=True)
     # Archive state
