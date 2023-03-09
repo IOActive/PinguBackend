@@ -25,16 +25,7 @@ class Statistic_List_Create_APIView(generics.mixins.ListModelMixin,
     
     serializer_class = StatisticSerializer
 
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = Statistic.objects.all()
-        id = self.request.query_params.get('id')
-        if id is not None:
-            queryset = queryset.filter(id=id)
-        return queryset
+    queryset = Statistic.objects.all()
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

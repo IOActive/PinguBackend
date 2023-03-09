@@ -25,17 +25,7 @@ class TestCase_List_Create_APIView(generics.mixins.ListModelMixin,
     
     serializer_class = TestCaseSerializer
 
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = TestCase.objects.all()
-        job_id = self.request.query_params.get('job_id')
-        _id = self.request.query_params.get('id')
-        if _id is not None:
-            queryset = queryset.filter(id=_id)
-        return queryset
+    queryset = TestCase.objects.all()
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

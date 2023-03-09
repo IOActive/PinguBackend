@@ -21,20 +21,8 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
     
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'bot_name']
-    
+    queryset = Bot.objects.all()
     serializer_class = BotSerializer
-
-    def get_queryset(self):
-        queryset = Bot.objects.all()
-        bot_name = self.request.query_params.get('bot_name')
-        id = self.request.query_params.get('id')
-        if bot_name is not None and id is not None:
-            queryset = queryset.filter(bot_name=bot_name, id=id)
-        elif bot_name is not None:
-            queryset = queryset.filter(bot_name=bot_name)
-        elif id is not None:
-            queryset = queryset.filter(id=id)
-        return queryset
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

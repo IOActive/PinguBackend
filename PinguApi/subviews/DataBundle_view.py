@@ -24,18 +24,9 @@ class DataBundle_List_Create_APIView(generics.mixins.ListModelMixin,
     filterset_fields = ['id']
     
     serializer_class = DataBundleSerializer
-
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = DataBundle.objects.all()
-        id = self.request.query_params.get('id')
-        if id is not None:
-            queryset = queryset.filter(id=id)
-        return queryset
     
+    queryset = DataBundle.objects.all()
+
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 

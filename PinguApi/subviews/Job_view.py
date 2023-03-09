@@ -24,22 +24,8 @@ class Job_List_Create_APIView(generics.mixins.ListModelMixin,
     filterset_fields = ['id', 'name']
     
     serializer_class = JobSerializer
-
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = Job.objects.all()
-        name = self.request.query_params.get('name')
-        id = self.request.query_params.get('id')
-        if name is not None and id is not None:
-            queryset = queryset.filter(name=name, id=id)
-        elif name is not None:
-            queryset = queryset.filter(name=name)
-        elif id is not None:
-            queryset = queryset.filter(id=id)
-        return queryset
+    
+    queryset = Job.objects.all()
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
