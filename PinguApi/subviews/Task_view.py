@@ -41,7 +41,7 @@ class Task_APIView(APIView):
                 response.status_code = 404
                 return response
             
-    def put(self, request):
+    def post(self, request):
         body = request.data
         command = body.get('command')
         argument = body.get('argument')

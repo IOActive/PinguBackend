@@ -1,0 +1,48 @@
+version: '3'
+services:  
+  database:
+    image: mongo
+    restart: always
+    hostname: 'database'
+    volumes:
+      - db_data:/data/db
+      - db_data:/data/configdb
+    ports:
+      - "27017:27017"
+
+  backend:
+    image: pingubackend
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+        - "8086:8080" # web
+        - "8087:8087" #Redis tasks
+    depends_on:
+      - database
+      - queue
+    environment:
+      - TERM=linux
+      - TERMINFO=/etc/terminfo
+
+  queue:
+    image: "rabbitmq:3-management"
+    hostname: 'queue'
+    volumes:
+      - queue:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=s3cr3tc00ki3
+    ports: 
+      - '5672:5672'
+      - '15672:15672'
+    logging:
+      driver: none
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/roboboy/mounting_point/src/database' 
+  queue:
