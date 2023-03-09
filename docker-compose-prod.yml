@@ -1,0 +1,65 @@
+version: '3'
+services:  
+  database:
+    image: mongo
+    restart: always
+    hostname: 'database'
+    volumes:
+      - db_data:/data/db
+      - db_data:/data/configdb
+    #ports:
+    #  - "27017:27017"
+    networks:
+      pingu_net:
+        ipv4_address: 172.25.0.101
+
+  backend:
+    image: pingubackend
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+        - "8086:8080" # web
+        #- "8087:8087" #Redis tasks
+    depends_on:
+      - database
+      - queue
+    environment:
+      - TERM=linux
+      - TERMINFO=/etc/terminfo
+    networks:
+      pingu_net:
+        ipv4_address: 172.25.0.102
+
+  queue:
+    image: "rabbitmq:3-management"
+    hostname: 'queue'
+    volumes:
+      - queue:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=s3cr3tc00ki3
+    #ports: 
+    #  - '5672:5672'
+    #  - '15672:15672'
+    logging:
+      driver: none
+    networks:
+      pingu_net:
+        ipv4_address: 172.25.0.103
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/roboboy/mounting_point/src/database'
+      
+  queue:
+
+networks:
+  pingu_net:
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
