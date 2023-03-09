@@ -21,10 +21,10 @@ class Bot(models.Model):
     last_beat_time = models.DateTimeField()
 
     # Task payload containing information on current task execution.
-    task_payload = models.CharField(max_length=200)
+    task_payload = models.CharField(max_length=200, blank=True)
 
     # Expected end time for task.
-    task_end_time = models.DateTimeField()
+    task_end_time = models.DateTimeField(null=True, blank=True)
 
     # Tasks status
     task_status = models.CharField(

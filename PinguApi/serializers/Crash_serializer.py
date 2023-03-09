@@ -1,8 +1,8 @@
 from rest_framework import serializers 
 from PinguApi.submodels.Crash import Crash
- 
+from PinguApi.submodels.TestCase import TestCase
 class CrashSerializer(serializers.ModelSerializer):
-    testcase_id = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    testcase_id = serializers.PrimaryKeyRelatedField(many=False, required=True, queryset=TestCase.objects.all())
     class Meta:
         model = Crash
         fields = (  "id",

@@ -21,7 +21,7 @@ class JobTemplate_List_Create_APIView(generics.mixins.ListModelMixin,
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id']
+    filterset_fields = ['id', 'name']
     
     serializer_class = JobTemplateSerializer
 
@@ -32,7 +32,12 @@ class JobTemplate_List_Create_APIView(generics.mixins.ListModelMixin,
         """
         queryset = JobTemplate.objects.all()
         id = self.request.query_params.get('id')
-        if id is not None:
+        name = self.request.query_params.get('name')
+        if name is not None and id is not None:
+            queryset = queryset.filter(name=name, id=id)
+        elif name is not None:
+            queryset = queryset.filter(name=name)
+        elif id is not None:
             queryset = queryset.filter(id=id)
         return queryset
     

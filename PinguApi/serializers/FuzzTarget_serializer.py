@@ -3,7 +3,7 @@ from PinguApi.submodels.FuzzTarget import FuzzTarget
 from PinguApi.submodels.Fuzzer import Fuzzer
 
 class FuzzTargetSerializer(serializers.ModelSerializer):
-    fuzzer_engine = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    fuzzer_engine = serializers.PrimaryKeyRelatedField(many=False, required=True, queryset=Fuzzer.objects.all())
     class Meta:
         model = FuzzTarget
         fields = ('id',

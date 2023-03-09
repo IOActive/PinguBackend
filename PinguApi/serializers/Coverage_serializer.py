@@ -1,9 +1,9 @@
 from rest_framework import serializers 
 from PinguApi.submodels.TestCase import TestCase
-from PinguApi.submodels.Coverage import Coverage 
- 
+from PinguApi.submodels.Coverage import Coverage
 class CoverageSerializer(serializers.ModelSerializer):
-    testcase = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    testcase = serializers.PrimaryKeyRelatedField(many=False, required=True, queryset=TestCase.objects.all())
+
     class Meta:
         model = Coverage
         fields = ('id',

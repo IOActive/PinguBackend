@@ -1,9 +1,10 @@
 from rest_framework import serializers 
 from PinguApi.submodels.TestCase import TestCase
-
+from PinguApi.submodels.Job import Job
+from PinguApi.submodels.Fuzzer import Fuzzer
 class TestCaseSerializer(serializers.ModelSerializer):
-    job_id = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-    fuzzer_id = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    job_id = serializers.PrimaryKeyRelatedField(many=False, required=True, queryset=Job.objects.all())
+    fuzzer_id = serializers.PrimaryKeyRelatedField(many=False, required=True, queryset=Fuzzer.objects.all())
     
     class Meta:
         model = TestCase
