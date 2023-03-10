@@ -21,7 +21,7 @@ class FuzzTarget_List_Create_APIView(generics.mixins.ListModelMixin,
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id']
+    filterset_fields = ['id', 'fuzzer_engine', 'binary']
     
     serializer_class = FuzzTargetSerializer
     

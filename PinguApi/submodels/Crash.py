@@ -5,7 +5,7 @@ import uuid
 class Crash(models.Model):
     # UUID
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    testcase_id = models.ForeignKey(to=TestCase, on_delete=models.CASCADE)
+    testcase_id = models.ForeignKey(to=TestCase, on_delete=models.CASCADE, related_name='crash_testcase')
     crash_signal = models.IntegerField()
     exploitability = models.CharField(max_length=50)
     crash_time = models.DateTimeField()
@@ -20,7 +20,7 @@ class Crash(models.Model):
     regression = models.CharField(max_length=200)
     security_severity = models.IntegerField()
     absolute_path = models.CharField(max_length=50)
-    security_flag = models.BooleanField(default=False)
+    security_flag = models.BooleanField()
     reproducible_flag = models.BooleanField(default=False)
     return_code = models.CharField(max_length=50)
     gestures = models.JSONField()

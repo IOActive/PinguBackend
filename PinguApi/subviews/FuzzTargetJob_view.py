@@ -21,7 +21,7 @@ class FuzzTargetJob_List_Create_APIView(generics.mixins.ListModelMixin,
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'job_id', 'fuzzing_target']
+    filterset_fields = ['id', 'job', 'fuzzing_target', 'engine']
     
     serializer_class = FuzzTargetJobSerializer
     queryset = FuzzTargetJob.objects.all()

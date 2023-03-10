@@ -16,11 +16,11 @@ class TestCase(models.Model):
     # UUID
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
-    bug_information = models.CharField(max_length=500, blank=True)
+    bug_information = models.CharField(max_length=500, blank=True, null=True)
 
     # Testcase file
     test_case = models.BinaryField()
-    fixed = models.BooleanField(default=False)
+    fixed = models.CharField(max_length=50, blank=True)
 
     # Did the bug only reproduced once ?
     one_time_crasher_flag = models.BooleanField(default=False)
@@ -75,5 +75,5 @@ class TestCase(models.Model):
     redzone =  models.IntegerField(default=128)
 
     # References
-    job_id = models.ForeignKey(to=Job, on_delete=models.CASCADE)
+    job_id = models.ForeignKey(to=Job, on_delete=models.CASCADE, related_name="testcase_job")
     fuzzer_id = models.ForeignKey(to=Fuzzer, on_delete=models.CASCADE)

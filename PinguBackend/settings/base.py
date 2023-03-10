@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'PinguApi.apps.PinguapiConfig',
     'rest_framework.authtoken',
     'django_filters',
-    'drf_yasg'
+    'drf_yasg',
+    'rest_framework_filters'
 ]
 
 MIDDLEWARE = [

@@ -21,7 +21,7 @@ class Crash_List_Create_APIView(generics.mixins.ListModelMixin,
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id']
+    filterset_fields = ['id', 'testcase_id']
     
     serializer_class = CrashSerializer
     

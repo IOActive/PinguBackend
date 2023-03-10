@@ -21,7 +21,7 @@ class BuildMetadata_List_Create_APIView(generics.mixins.ListModelMixin,
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id']
+    filterset_fields = ['id', 'job', 'revision']
     
     serializer_class = BuildMetadataSerializer
     queryset = BuildMetadata.objects.all()
