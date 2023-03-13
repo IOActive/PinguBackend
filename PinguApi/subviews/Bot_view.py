@@ -8,6 +8,7 @@ from PinguApi.submodels.Bot import Bot
 from PinguApi.serializers.Bot_serializer import BotSerializer
 from rest_framework.decorators import api_view
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
@@ -16,7 +17,7 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
