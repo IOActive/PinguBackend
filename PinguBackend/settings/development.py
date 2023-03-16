@@ -12,4 +12,8 @@ DATABASES = {
 
 QUEUE_HOST = 'localhost'
 CELERY_BROKER_URL = 'amqp://localhost'
-    
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8081',
+)
