@@ -8,6 +8,7 @@ from PinguApi.submodels.Job import Job
 from PinguApi.serializers.Job_serializer import JobSerializer
 from rest_framework.decorators import api_view
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
@@ -17,7 +18,7 @@ class Job_List_Create_APIView(generics.mixins.ListModelMixin,
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
@@ -38,7 +39,7 @@ class Job_Update_Delete_APIView(EnablePartialUpdateMixin,
                       generics.mixins.DestroyModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     queryset = Job.objects.all()
