@@ -82,7 +82,10 @@ REST_FRAMEWORK = {
     
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
-    ]
+    ],
+    
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
 }
 
 CORS_ORIGIN_ALLOW_ALL = False
