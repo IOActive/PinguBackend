@@ -40,7 +40,7 @@ class Fuzzer_Update_Delete_APIView(EnablePartialUpdateMixin,
                       generics.mixins.DestroyModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     queryset = Fuzzer.objects.all()
