@@ -15,7 +15,7 @@ class Bot(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     """Bot health metadata."""
     # Name of the bot.
-    bot_name = models.CharField(max_length=40, unique=True)
+    name = models.CharField(max_length=40, unique=True)
 
     # Time of the last heartbeat.
     last_beat_time = models.DateTimeField(null=True, blank=True)

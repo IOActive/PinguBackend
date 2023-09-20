@@ -26,7 +26,7 @@ class BotTests(APITestCase):
         )
         
     def init_test_bot(self):
-        bot = {'bot_name': "test_bot",
+        bot = {'name': "test_bot",
                'task_payload': "task_payload",
                'task_end_time': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
                'last_beat_time': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
@@ -36,7 +36,7 @@ class BotTests(APITestCase):
         return bot_object
             
     def test_register(self):
-        bot = {'bot_name': "test_bot2",
+        bot = {'name': "test_bot2",
                'task_payload': "task_payload",
                'task_end_time': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
                'last_beat_time': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
@@ -55,7 +55,7 @@ class BotTests(APITestCase):
 
     def test_get_bot(self):
         bot_name = 'test_bot'
-        response = self.client.get(f'/api/bot/?bot_name={bot_name}')
+        response = self.client.get(f'/api/bot/?name={bot_name}')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(len(result) > 0)

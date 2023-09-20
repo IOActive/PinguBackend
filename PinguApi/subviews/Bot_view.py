@@ -21,7 +21,7 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'bot_name']
+    filterset_fields = ['id', 'name']
     queryset = Bot.objects.all()
     serializer_class = BotSerializer
     

@@ -6,7 +6,7 @@ class BotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bot
         fields = ('id',
-                  'bot_name',
+                  'name',
                   'last_beat_time',
                   'task_payload',
                   'task_end_time',
