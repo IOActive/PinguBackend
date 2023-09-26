@@ -1,6 +1,7 @@
 from django.db import models
 from PinguApi.submodels.JobTemplate import JobTemplate
 import uuid
+from PinguApi.submodels.Platforms import Supported_Platforms
 class Job(models.Model):
     # UUID
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -19,7 +20,10 @@ class Job(models.Model):
     # Job Owner
     #owner = ReferenceField(User, blank=True, null=True, default=None)
     # The platform that this job can run on.
-    platform = models.CharField(max_length=50)
+    platform = models.CharField(max_length=50,
+                                default='NA',
+                                choices=Supported_Platforms.choices)
+    
     # Job environment string.
     environment_string = models.CharField(max_length=200, blank=True, null=True, default=None)
     # Template to use, if any.

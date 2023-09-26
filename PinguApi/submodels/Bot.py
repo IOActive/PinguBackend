@@ -2,7 +2,7 @@ from enum import Enum
 from django.db import models
 import uuid
 from django.conf import settings 
-
+from PinguApi.submodels.Platforms import Supported_Platforms
 class Bot(models.Model):
     class TaskStatus(models.TextChoices):
         STARTED = 'started'
@@ -33,6 +33,8 @@ class Bot(models.Model):
         default=TaskStatus.NA,
     )
 
-
     # Platform (esp important for Android platform for OS version).
-    platform = models.CharField(max_length=50)
+    platform = models.CharField(max_length=50,
+                                default='NA',
+                                choices=Supported_Platforms.choices)
+    
