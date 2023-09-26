@@ -13,8 +13,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from PinguApi.utils.EnablePartialUpdateMixin import EnablePartialUpdateMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-
+from PinguApi.tasks import upload_fuzzer_to_bucket
+import base64
 class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin, 
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
@@ -33,6 +33,8 @@ class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin,
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        zip_file = base64.b64decode(request.data['fuzzer_zip'])
+        upload_fuzzer_to_bucket.delay(zip_file)
         return self.create(request, *args, **kwargs)
 
 
