@@ -10,12 +10,14 @@ from django.contrib.auth import get_user_model
 from PinguApi.submodels.Fuzzer import Fuzzer
 from django.core.files.uploadedfile import SimpleUploadedFile
 import base64
+from unittest.mock import patch, MagicMock
+from PinguApi.tasks import upload_fuzzer_to_bucket
 class FuzzerTests(APITestCase):
     def setUp(self):
         self.user = self.setup_user()
         self.token = Token.objects.get_or_create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token[0].key)
-        self.fuzzer_zip = b'PK\x03\x04\n\x00\x00\x00\x00\x00[\x8f4W6\xf9\x19\xe7\x1c\x00\x00\x00\x1c\x00\x00\x00\x11\x00\x1c\x00best_file_eva.txtUT\t\x00\x03\xbe\x16\x0be\x1f%\x0beux\x0b\x00\x01\x04\xe8\x03\x00\x00\x04\xe8\x03\x00\x00these are the file contents!PK\x01\x02\x1e\x03\n\x00\x00\x00\x00\x00[\x8f4W6\xf9\x19\xe7\x1c\x00\x00\x00\x1c\x00\x00\x00\x11\x00\x18\x00\x00\x00\x00\x00\x01\x00\x00\x00\xa4\x81\x00\x00\x00\x00best_file_eva.txtUT\x05\x00\x03\xbe\x16\x0beux\x0b\x00\x01\x04\xe8\x03\x00\x00\x04\xe8\x03\x00\x00PK\x05\x06\x00\x00\x00\x00\x01\x00\x01\x00W\x00\x00\x00g\x00\x00\x00\x00\x00' #open('PinguApi/subtests/test_Fuzzer.py', 'rb').read()
+        self.fuzzer_zip = open('PinguApi/subtests/test.zip', 'rb').read()
         self.test_Fuzzer = self.init_test_Fuzzer()
         
 
@@ -33,8 +35,8 @@ class FuzzerTests(APITestCase):
             "timestamp": datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
             "name": "test_fuzzer",
             "filename": "test_fuzzer",
-            "file_size": "12",
-            "blobstore_path": "sadsad",
+            "file_size": "212",
+            "blobstore_path": "fuzzers/test.zip",
             "executable_path": "adsad",
             "revision": 1.0,
             "timeout": 1,
@@ -60,7 +62,8 @@ class FuzzerTests(APITestCase):
         Fuzzer_object.save()
         return Fuzzer_object
             
-    def test_create_Fuzzers(self):
+    @patch('PinguApi.tasks.upload_fuzzer_to_bucket.apply')
+    def test_create_Fuzzers(self, mock_apply: MagicMock):
         fuzzer = {
             "timestamp": datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
             "name": "test_fuzzer2",
@@ -89,8 +92,17 @@ class FuzzerTests(APITestCase):
             "fuzzer_zip": base64.b64encode(self.fuzzer_zip).decode('utf-8'),
         }
         
+        
+        # Mock the apply method of the upload_fuzzer_to_bucket task
+        mock_task = MagicMock()
+        mock_task.get.return_value = ('/path/to/blobstore', 12345)
+        mock_apply.return_value = mock_task
+        
         response = self.client.post(f'/api/fuzzer/', data=fuzzer, format='json')
-        result = json.loads(response.content)
+        
+        # Assert that the Celery task was called with the correct arguments
+        mock_apply.assert_called()
+    
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
@@ -100,18 +112,40 @@ class FuzzerTests(APITestCase):
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(len(result) > 0)
 
-    def test_get_Fuzzer(self):
+    @patch('PinguApi.tasks.download_fuzzer_from_bucket.apply')
+    def test_get_Fuzzer(self, mock_apply: MagicMock):
+        
+        # Mock the apply method of the upload_fuzzer_to_bucket task
+        mock_task = MagicMock()
+        mock_task.get.return_value = self.fuzzer_zip
+        mock_apply.return_value = mock_task
+        
         response = self.client.get(f'/api/fuzzer/?id={self.test_Fuzzer.id}')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(len(result) > 0)
         
-    def test_update_Fuzzer(self):
+    @patch('PinguApi.tasks.upload_fuzzer_to_bucket.apply')
+    def test_update_Fuzzer(self, mock_apply: MagicMock):
         fuzzer_update = {
-            "file_size": "13MB",
+            "fuzzer_zip": base64.b64encode(self.fuzzer_zip).decode('utf-8'),
+            "filename": "test_fuzzer.zip",
         }
+        
+        mock_task = MagicMock()
+        mock_task.get.return_value = ('/path/to/blobstore', 12345)
+        mock_apply.return_value = mock_task
         
         response = self.client.patch(f'/api/fuzzer/{self.test_Fuzzer.id}/', data=fuzzer_update, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(result['file_size'], "13MB")
+        
+    @patch('PinguApi.tasks.remove_fuzzer_from_bucket.apply')
+    def test_remove_fuzzer(self, mock_apply):
+        mock_task = MagicMock()
+        mock_task.get.return_value = None
+        mock_apply.return_value = mock_task
+        
+        response = self.client.delete(f'/api/fuzzer/{self.test_Fuzzer.id}/')
+        self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

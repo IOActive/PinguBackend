@@ -26,4 +26,34 @@ def upload_fuzzer_to_bucket(zip_file_stream, zip_filename):
         logger.error(e)
         
     
-    
+@shared_task(name="download_fuzzer_from_bucket")
+def download_fuzzer_from_bucket(blobstore_path):
+    try:
+        bucket_client = MinioManger()
+        # get the root directory and the rest of the path in two new strings
+        splitted_path = blobstore_path.split('/', 1)
+        bucket_name = splitted_path[0]
+        # get the rest of the path
+        fileName = splitted_path[1]
+        # get the file from the bucket
+        result = bucket_client.get_object(bucketName=bucket_name, fileName=fileName)
+        logger.info("download_fuzzer_from_bucket")
+        return result.data
+    except Exception as e:
+        logger.error(e)
+        
+@shared_task(name="remove_fuzzer_from_bucket")
+def remove_fuzzer_from_bucket(blobstore_path):
+    try:
+        bucket_client = MinioManger()
+        # get the root directory and the rest of the path in two new strings
+        splitted_path = blobstore_path.split('/', 1)
+        bucket_name = splitted_path[0]
+        # get the rest of the path
+        fileName = splitted_path[1]
+        # get the file from the bucket
+        result = bucket_client.remove_object(bucketName=bucket_name, fileName=fileName)
+        logger.info("remove_fuzzer_from_bucket")
+        return result
+    except Exception as e:
+        logger.error(e)
