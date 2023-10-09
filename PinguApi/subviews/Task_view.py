@@ -9,10 +9,12 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from PinguApi.utils.workQueue import create_queue, publish, get_queue_element, queue_exists
 from PinguApi.submodels.Job import Job
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 class Task_APIView(APIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser]
     

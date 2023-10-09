@@ -38,10 +38,15 @@ class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin,
             fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
             fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
             serializer = FuzzerSerializer(fuzzer)
-            return JsonResponse(serializer.data, safe=False)
-        else: 
-            return self.list(request, *args, **kwargs)
-
+            return JsonResponse({"results": serializer.data}, safe=False)
+        else:
+            fuzzers = self.get_queryset()
+            for fuzzer in fuzzers:
+                fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
+                fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
+            serializer = FuzzerSerializer(fuzzers, many=True)
+            return JsonResponse({"results": serializer.data}, safe=False)
+            
     def post(self, request, *args, **kwargs):
         zip_file = base64.b64decode(request.data['fuzzer_zip'])
         zip_file_name = request.data['filename']
@@ -66,11 +71,12 @@ class Fuzzer_Update_Delete_APIView(EnablePartialUpdateMixin,
         return self.destroy(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        zip_file = base64.b64decode(request.data['fuzzer_zip'])
-        zip_file_name = request.data['filename']
-        blobstore_path, size_in_bytes = upload_fuzzer_to_bucket.apply(args=[zip_file, zip_file_name]).get()
-        request.data['blobstore_path'] = blobstore_path
-        request.data['file_size'] = size_in_bytes
+        if request.data['fuzzer_zip'] and request.data['fuzzer_zip'] != '':
+            zip_file = base64.b64decode(request.data['fuzzer_zip'])
+            zip_file_name = request.data['filename']
+            blobstore_path, size_in_bytes = upload_fuzzer_to_bucket.apply(args=[zip_file, zip_file_name]).get()
+            request.data['blobstore_path'] = blobstore_path
+            request.data['file_size'] = size_in_bytes
         return self.update(request, *args, **kwargs)
 
 
