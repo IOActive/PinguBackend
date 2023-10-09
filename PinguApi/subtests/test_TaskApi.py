@@ -50,7 +50,7 @@ class TaskTests(APITestCase):
             'argument': 'libFuzzer',
         }
         
-        response = self.client.put(f'/api/task/', data=task_test, format='json')
+        response = self.client.post(f'/api/task/', data=task_test, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -63,7 +63,7 @@ class TaskTests(APITestCase):
             'argument': 'blackFuzzer',
         }
         
-        response = self.client.put(f'/api/task/', data=task_test, format='json')
+        response = self.client.post(f'/api/task/', data=task_test, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -76,13 +76,19 @@ class TaskTests(APITestCase):
             'argument': str(self.test_tesetcase.id),
         }
         
-        response = self.client.put(f'/api/task/', data=task_test, format='json')
+        response = self.client.post(f'/api/task/', data=task_test, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_get_task(self):
         response = self.client.get(f'/api/task/?platform=Linux')
+        result = json.loads(response.content)
+        self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+    def test_read_tasks(self):
+        response = self.client.get(f'/api/task/?platform=Linux&all')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

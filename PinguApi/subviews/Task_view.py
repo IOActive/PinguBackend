@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-from PinguApi.utils.workQueue import create_queue, publish, get_queue_element, queue_exists
+from PinguApi.utils.workQueue import create_queue, publish, get_queue_element, queue_exists, read_queue_elements
 from PinguApi.submodels.Job import Job
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -28,7 +28,10 @@ class Task_APIView(APIView):
             platform = data['platform']
             queue = 'tasks-%s' % platform
             if  (queue):
-                empty, task = get_queue_element(queue)
+                if 'all' in data:
+                    empty, task = read_queue_elements(queue)
+                else:
+                    empty, task = get_queue_element(queue)
                 if not empty:
                     response = Response(task)
                     response.status_code = 200
