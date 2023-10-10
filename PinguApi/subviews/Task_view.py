@@ -10,6 +10,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from PinguApi.utils.workQueue import create_queue, publish, get_queue_element, queue_exists, read_queue_elements
 from PinguApi.submodels.Job import Job
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from PinguApi.submodels.Platforms import Supported_Platforms
+
 
 
 class Task_APIView(APIView):
@@ -21,30 +23,40 @@ class Task_APIView(APIView):
     def get(self, request):
         data = request.query_params
         if 'platform' not in data:
-            response = Response({'success': False, 'msg': 'platform must be specified'})
-            response.status_code = 400
-            return response
-        else:
-            platform = data['platform']
-            queue = 'tasks-%s' % platform
-            if  (queue):
-                if 'all' in data:
-                    empty, task = read_queue_elements(queue)
-                else:
-                    empty, task = get_queue_element(queue)
+            json_object = json.loads("{\"results\": {}}")
+            empty = True
+            for platform in Supported_Platforms:
+                queue = f'tasks-{platform.value}'
+                empty, tasks = read_queue_elements(queue)
                 if not empty:
-                    response = Response(task)
-                    response.status_code = 200
-                    return response
-                else:
-                    response = Response({'success': False, 'msg': 'empty queue'})
-                    response.status_code = 404
-                    return response
+                    json_object['results'] = tasks
+                
+            if len(json_object) > 0:
+                response = Response(json_object)
+                response.status_code = 200
+                return response
             else:
-                response = Response({'success': False, 'msg': 'queue does not exist'})
-
+                response = Response({'success': False, 'msg': 'empty queue'})
                 response.status_code = 404
                 return response
+        
+        if 'platform' in data:
+            platform = data['platform']
+            queue = 'tasks-%s' % platform
+            empty, task = get_queue_element(queue)
+            if not empty:
+                response = Response(task)
+                response.status_code = 200
+                return response
+            else:
+                response = Response({'success': False, 'msg': 'empty queue'})
+                response.status_code = 404
+                return response
+        else:
+            response = Response({'success': False, 'msg': 'queue does not exist'})
+
+            response.status_code = 404
+            return response
             
     def post(self, request):
         body = request.data

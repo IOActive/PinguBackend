@@ -1,6 +1,8 @@
 import json
 import pika
 from django.conf import settings 
+from  pika.exceptions import ChannelError, ChannelClosedByBroker
+from logging import getLogger
 
 
 
@@ -15,25 +17,26 @@ def get_queue_element(queue_name):
         return True, {}
     
 def read_queue_elements(queue_name):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.QUEUE_HOST))
-    msgs = []
-    while True:
-        chl = connection.channel()
-        method_frame, header_frame, body = chl.basic_get(queue=queue_name)
-        if method_frame:
-            print("body : ", body)
-            msgs.append(body.decode('utf-8'))
+    try:
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.QUEUE_HOST))
+        msgs = []
+        while True:
+            chl = connection.channel()
+            method_frame, header_frame, body = chl.basic_get(queue=queue_name)
+            if method_frame:
+                msgs.append(json.loads(body.decode('utf-8')))
+            else:
+                getLogger('PinguAPI').info("No more messages returned")
+                connection.close()
+                break
+        if len(msgs) > 0:
+            return False, msgs
         else:
-            print("No more messages returned")
-            connection.close()
-            break
-    
-    json_object = json.loads("{}")
-    json_object['messages'] = msgs
-    if len(msgs) > 0:
-        return False, json_object
-    else:
-        return True, json_object
+            return True, msgs
+        
+    except ChannelClosedByBroker as e:
+        getLogger('PinguAPI').exception(e)
+        return True, []
     
 
 def queue_exists(queue_name):

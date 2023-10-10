@@ -88,7 +88,7 @@ class TaskTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_read_tasks(self):
-        response = self.client.get(f'/api/task/?platform=Linux&all')
+        response = self.client.get(f'/api/task/')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
