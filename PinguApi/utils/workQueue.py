@@ -35,7 +35,7 @@ def read_queue_elements(queue_name):
             return True, msgs
         
     except ChannelClosedByBroker as e:
-        getLogger('PinguAPI').exception(e)
+        #getLogger('PinguAPI').exception(e)
         return True, []
     
 

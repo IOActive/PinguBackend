@@ -31,7 +31,7 @@ class Task_APIView(APIView):
                 if not empty:
                     json_object['results'] = tasks
                 
-            if len(json_object) > 0:
+            if len(json_object['results']) > 0:
                 response = Response(json_object)
                 response.status_code = 200
                 return response
