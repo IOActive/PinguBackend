@@ -15,6 +15,7 @@ from PinguApi.utils.EnablePartialUpdateMixin import EnablePartialUpdateMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from PinguApi.tasks import upload_fuzzer_to_bucket, download_fuzzer_from_bucket, remove_fuzzer_from_bucket
 from PinguApi.utils.Base64FileField import ZIPBase64File
+from django.core.exceptions import ObjectDoesNotExist
 
 import base64
 class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin, 
@@ -32,20 +33,30 @@ class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin,
     serializer_class = FuzzerSerializer
     
     def get(self, request, *args, **kwargs):
-        if 'id' in request.query_params:
-            # get the fuzzer from db and modify the fuzzer_zip field with the blobstore_path from the bucket
-            fuzzer = Fuzzer.objects.get(id=request.query_params['id'])
-            fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
-            fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
-            serializer = FuzzerSerializer(fuzzer)
-            return JsonResponse({"results": serializer.data}, safe=False)
-        else:
-            fuzzers = self.get_queryset()
-            for fuzzer in fuzzers:
+        try:
+            if 'id' in request.query_params:
+                # get the fuzzer from db and modify the fuzzer_zip field with the blobstore_path from the bucket
+                fuzzer = Fuzzer.objects.get(id=request.query_params['id'])
                 fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
                 fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
-            serializer = FuzzerSerializer(fuzzers, many=True)
-            return JsonResponse({"results": serializer.data}, safe=False)
+                serializer = FuzzerSerializer(fuzzer)
+                return JsonResponse({"results": serializer.data}, safe=False)
+            elif 'name' in request.query_params:
+                # get the fuzzer from db and modify the fuzzer_zip field with the blobstore_path from the bucket
+                fuzzer = Fuzzer.objects.get(name=request.query_params['name'])
+                fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
+                fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
+                serializer = FuzzerSerializer(fuzzer)
+                return JsonResponse({"results": serializer.data}, safe=False)
+            else:
+                fuzzers = self.get_queryset()
+                for fuzzer in fuzzers:
+                    fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
+                    fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
+                serializer = FuzzerSerializer(fuzzers, many=True)
+                return JsonResponse({"results": serializer.data}, safe=False)
+        except ObjectDoesNotExist as e:
+            return JsonResponse({"results": {}}, safe=False)
             
     def post(self, request, *args, **kwargs):
         zip_file = base64.b64decode(request.data['fuzzer_zip'])
