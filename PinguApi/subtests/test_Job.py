@@ -58,7 +58,7 @@ class JobTests(APITestCase):
             "custom_binary_revision": 1
         }
         
-        response = self.client.put(f'/api/job/', data=job, format='json')
+        response = self.client.post(f'/api/job/', data=job, format='json')
         result = json.loads(response.content)
         self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

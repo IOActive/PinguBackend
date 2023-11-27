@@ -12,29 +12,22 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from PinguApi.utils.EnablePartialUpdateMixin import EnablePartialUpdateMixin
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 class Crash_List_Create_APIView(generics.mixins.ListModelMixin, 
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id']
+    filterset_fields = ['id', 'testcase_id']
     
     serializer_class = CrashSerializer
-
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = Crash.objects.all()
-        id = self.request.query_params.get('id')
-        if id is not None:
-            queryset = queryset.filter(id=id)
-        return queryset
+    
+    queryset = Crash.objects.all()
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

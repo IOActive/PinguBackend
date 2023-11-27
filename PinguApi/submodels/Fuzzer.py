@@ -1,7 +1,7 @@
 import re
 from django.db import models
 import uuid
-
+from PinguApi.submodels.Platforms import Supported_Platforms
 
 class Fuzzer(models.Model):
     # UUID
@@ -9,39 +9,45 @@ class Fuzzer(models.Model):
     # Additionally allows '.' and '@' over NAME_CHECK_REGEX.
     VALID_NAME_REGEX = re.compile(r'^[a-zA-Z0-9_@.-]+$')
     # Last update time.
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now=True)
+    
     # Fuzzer Name.
     name = models.CharField(max_length=50, unique=True)
 
     # The name of the archive that the user uploaded.
     filename = models.CharField(max_length=50)
+    
+    # Zip file containing the fuzzer. Dont store it to the Database just keep the blob data.
+    fuzzer_zip = models.FileField(upload_to='tmp', null=True, verbose_name="")
 
     # String representation of the file size.
-    file_size = models.CharField(max_length=50)
+    file_size = models.IntegerField(default=0)
 
     # Blobstore path or URL for this fuzzer.
-    blobstore_path = models.CharField(max_length=200)
+    blobstore_path = models.CharField(max_length=200, default="", blank=True, null=True)
 
     # Fuzzer's main executable path, relative to root.
-    executable_path = models.CharField(max_length=200)
+    executable_path = models.CharField(max_length=200, default="", blank=True, null=True)
 
     # Revision number of the fuzzer.
     revision = models.FloatField(default=1.0)
 
     # Testcase timeout.
-    timeout = models.IntegerField()
+    timeout = models.IntegerField(default=0)
 
     # Supported platforms.
-    supported_platforms = models.CharField(max_length=50)
-
+    supported_platforms = models.CharField(max_length=50,
+                                default='NA',
+                                choices=Supported_Platforms.choices)
+    
     # Custom script that should be used to launch chrome for this fuzzer.
-    launcher_script = models.CharField(max_length=200)
+    launcher_script = models.CharField(max_length=200, default="", blank=True, null=True)
 
     # Result from the last fuzzer run showing the number of testcases generated.
     result = models.CharField(max_length=500, default="")
 
     # Last result update timestamp.
-    result_timestamp = models.DateTimeField()
+    result_timestamp = models.DateTimeField(blank=True, null=True)
 
     # Console output from last fuzzer run.
     console_output = models.CharField(max_length=500, default="")
@@ -53,19 +59,19 @@ class Fuzzer(models.Model):
     sample_testcase = models.CharField(max_length=500, default="")
 
     # Max testcases to generate for this fuzzer.
-    max_testcases = models.IntegerField()
+    max_testcases = models.IntegerField(default=1000)
 
     # Does it run un-trusted content ? Examples including running live sites.
     untrusted_content = models.BooleanField(default=False)
 
     # Additional environment variables that need to be set for this fuzzer.
-    additional_environment_string = models.CharField(max_length=500)
+    additional_environment_string = models.CharField(max_length=500, default="", blank=True, null=True)
 
     # Column specification for stats.
-    stats_columns = models.CharField(max_length=50)
+    stats_columns = models.JSONField(default=dict, blank=True, null=True)
 
     # Helpful descriptions for the stats_columns. In a yaml format.
-    stats_column_descriptions = models.CharField(max_length=50)
+    stats_column_descriptions = models.JSONField(default=dict, blank=True, null=True)
 
     # Whether this is a builtin fuzzer.
     builtin = models.BooleanField(default=False)
@@ -78,4 +84,4 @@ class Fuzzer(models.Model):
     has_large_testcases = models.BooleanField(default=False)
 
     # Data bundle name.
-    data_bundle_name = models.CharField(max_length=50, default='')
+    data_bundle_name = models.CharField(max_length=50, default='', blank=True, null=True)

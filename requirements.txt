@@ -11,3 +11,8 @@ pymongo==3.12.3
 pytest==7.2.1
 pytest-django==4.5.2
 python-decouple==3.8
+djangorestframework-filters==1.0.0.dev0
+djangorestframework-simplejwt==5.2.2
+djoser==2.2.3
+drf_extra_fields
+```

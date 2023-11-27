@@ -8,6 +8,7 @@ from PinguApi.submodels.Bot import Bot
 from PinguApi.serializers.Bot_serializer import BotSerializer
 from rest_framework.decorators import api_view
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
@@ -16,25 +17,13 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'bot_name']
-    
+    filterset_fields = ['id', 'name']
+    queryset = Bot.objects.all()
     serializer_class = BotSerializer
-
-    def get_queryset(self):
-        queryset = Bot.objects.all()
-        bot_name = self.request.query_params.get('bot_name')
-        id = self.request.query_params.get('id')
-        if bot_name is not None and id is not None:
-            queryset = queryset.filter(bot_name=bot_name, id=id)
-        elif bot_name is not None:
-            queryset = queryset.filter(bot_name=bot_name)
-        elif id is not None:
-            queryset = queryset.filter(id=id)
-        return queryset
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -47,7 +36,7 @@ class Bot_Update_Delete_APIView(EnablePartialUpdateMixin,
                       generics.mixins.DestroyModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     queryset = Bot.objects.all()

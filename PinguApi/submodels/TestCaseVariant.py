@@ -2,7 +2,7 @@ from django.db import models
 from PinguApi.submodels.Job import Job
 from PinguApi.submodels.TestCase import TestCase
 import uuid
-
+from PinguApi.submodels.Platforms import Supported_Platforms
 class TestCaseVariant(models.Model):
     
     class TestcaseVariantStatus(models.Choices):
@@ -43,4 +43,7 @@ class TestCaseVariant(models.Model):
     reproducer_key = models.CharField(max_length=200, default="")
 
     # Platform (e.g. windows, linux, android).
-    platform = models.CharField(max_length=50, default="")
+    platform = models.CharField(max_length=50,
+                                default='NA',
+                                choices=Supported_Platforms.choices)
+    

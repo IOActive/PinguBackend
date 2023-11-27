@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
- 
+from django.db.models import Prefetch
 from PinguApi.submodels.TestCase import TestCase
 from PinguApi.serializers.TestCase_serializer import TestCaseSerializer
 from rest_framework.decorators import api_view
@@ -12,30 +12,24 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from PinguApi.utils.EnablePartialUpdateMixin import EnablePartialUpdateMixin
+from PinguApi.submodels.Crash import Crash
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 class TestCase_List_Create_APIView(generics.mixins.ListModelMixin, 
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
+    queryset = TestCase.objects.prefetch_related(Prefetch('crash_testcase', queryset=Crash.objects.select_related('testcase_id')))
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'job_id']
-    
+    filterset_fields = ['id', 'job_id', 'job_id__project', 'crash_testcase__crash_type', 'crash_testcase__crash_state']
+        
     serializer_class = TestCaseSerializer
 
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = TestCase.objects.all()
-        job_id = self.request.query_params.get('job_id')
-        _id = self.request.query_params.get('id')
-        if _id is not None:
-            queryset = queryset.filter(id=_id)
-        return queryset
+    #queryset = TestCase.objects.all()
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

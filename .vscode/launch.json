@@ -13,9 +13,9 @@
             "justMyCode": true,
             "args": [
                 "runserver",
-                "8080",
+                "8086",
                 "--settings",
-                "PinguBackend.settings.docker_dev"
+                "PinguBackend.settings.development"
             ]
         }
     ]

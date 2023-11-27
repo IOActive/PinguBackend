@@ -1,8 +1,8 @@
 from rest_framework import serializers 
 from PinguApi.submodels.Job import Job
-
+from PinguApi.submodels.JobTemplate import JobTemplate
 class JobSerializer(serializers.ModelSerializer):
-    template = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    template = serializers.PrimaryKeyRelatedField(many=False, required=False, queryset=JobTemplate.objects.all())
 
     class Meta:
         model = Job

@@ -1,4 +1,4 @@
-from PinguBackend.settings.development import *
+from PinguBackend.settings.production import *
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

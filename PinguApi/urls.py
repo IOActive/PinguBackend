@@ -1,6 +1,8 @@
-from django.urls import path 
+from django.urls import path, include
 from PinguApi import views 
 from rest_framework.authtoken import views as rest_framework_views
+from rest_framework_simplejwt import views as jwt_views
+from PinguApi.subviews.Authentication_view import LoginViewSet, RegistrationViewSet, RefreshViewSet
 
 urlpatterns = [
     path(r'swagger.json', views.schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -50,6 +52,11 @@ urlpatterns = [
     
     path('api-token-auth/', rest_framework_views.obtain_auth_token),
     
-    path('task/', views.Task_APIView.as_view(), name='Task Add/Fetch')
+    path('task/', views.Task_APIView.as_view(), name='Task Add/Fetch'),
+    
+    path('token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    
+    path('', include(('PinguApi.routers', 'PinguApi'), namespace='core-api')),
 
 ]

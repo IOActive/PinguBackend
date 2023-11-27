@@ -1,9 +1,10 @@
 from rest_framework import serializers 
 from PinguApi.submodels.TestCaseVariant import TestCaseVariant
-
+from PinguApi.submodels.Job import Job
+from PinguApi.submodels.TestCase import TestCase
 class TestCaseVariantSerializer(serializers.ModelSerializer):
-    job_id = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-    testcase_id = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    job_id = serializers.PrimaryKeyRelatedField(many=False, required=True, queryset=Job.objects.all())
+    testcase_id = serializers.PrimaryKeyRelatedField(many=False, required=True, queryset=TestCase.objects.all())
     
     class Meta:
         model = TestCaseVariant
