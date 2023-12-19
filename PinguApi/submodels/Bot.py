@@ -38,3 +38,9 @@ class Bot(models.Model):
                                 default='NA',
                                 choices=Supported_Platforms.choices)
     
+    # Blobstore path or URL for this fuzzer.
+    blobstore_log_path = models.CharField(max_length=200, default="", blank=True, null=True)
+
+    # Text file containing the bot logs. Dont store it to the Database just keep the blob data.
+    bot_logs = models.FileField(upload_to='tmp', null=True, verbose_name="")
+    

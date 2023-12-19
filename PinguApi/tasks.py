@@ -9,23 +9,29 @@ import io
 
 logger = get_task_logger(__name__)
 
-@share_task(name="download_job_logs")
-def download_job_logs():
-        try:
+@shared_task(name="download_bot_logs")
+def download_bot_logs(bot_id):
+    try:
         bucket_client = MinioManger()
-        bucket_name = "test-fuzz-logs-bucket"
+        bucket_name = "test-bots-logs-bucket"
         logs = []
         # get the rest of the path
-        objects = client.list_objects(bucket_name, recursive=True)
+        objects = bucket_client.listObjects(bucket_name, recursive=True)
         for obj in objects:
-            if ".log" in obj.object_name:
-
-        # get the file from the bucket
-        result = bucket_client.get_object(bucketName=bucket_name, fileName=fileName)
-        logger.info("download_logs_from_bucket")
-        return result.data
+            split_path = obj.object_name.split('/')
+            filename = split_path[1]
+            bucket_bot_id = split_path[0]
+            if ".log" in filename and bot_id == bucket_bot_id:
+                # get the file from the bucket
+                result = bucket_client.get_object(bucketName=bucket_name, fileName=obj.object_name)
+                logs.append({
+                    'bot_id': split_path[0],
+                    'log_blob':result.data
+                    })
+        return logs
     except Exception as e:
         logger.error(e)
+
 
 @shared_task(name="upload_fuzzer_to_bucket")
 def upload_fuzzer_to_bucket(zip_file_stream, zip_filename):
