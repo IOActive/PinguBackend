@@ -10,15 +10,15 @@ DATABASES = {
       'ENGINE': 'djongo',
       'NAME': 'pingu_db',
       'CLIENT': {
-          'host': 'mongodb://database:27017',
+          'host': config('MONGO_HOST'),
       }
   }
 }
 
-QUEUE_HOST = 'queue'
-CELERY_BROKER_URL = 'amqp://queue'
+QUEUE_HOST = config('QUEUE_HOST')
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 
 #Bucktes Minio variables
-MINIO_HOST = '127.0.0.1:9000'
-ACCESS_KEY = 'mK6kUOlDZ834q0wL'
-SECRET_KEY = 'Hq1cuslNaaAFcLXU6q45fqhrFGFG3UCO'
+MINIO_HOST = config('MINIO_HOST')
+ACCESS_KEY = config('ACCESS_KEY')
+SECRET_KEY = config('SECRET_KEY')

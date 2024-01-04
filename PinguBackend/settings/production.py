@@ -9,10 +9,23 @@ DATABASES = {
       'ENGINE': 'djongo',
       'NAME': 'pingu_db',
       'CLIENT': {
-          'host': 'mongodb://xxxxx:27017/',
+          'host': config('MONGO_HOST'),
       }
   }
 }
+
+QUEUE_HOST = config('QUEUE_HOST')
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8081',
+)
+
+#Bucktes Minio variables
+MINIO_HOST = config('MINIO_HOST')
+ACCESS_KEY = config('ACCESS_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_HOST = 'smtp.mailgun.org'
