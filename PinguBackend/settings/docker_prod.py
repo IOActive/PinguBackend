@@ -5,12 +5,18 @@ from PinguBackend.settings.production import *
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'pingu_db',
-        'HOST': 'database',
-        'PORT': 27017,
-    }
+      'ENGINE': 'djongo',
+      'NAME': 'pingu_db',
+      'CLIENT': {
+          'host': config('MONGO_HOST'),
+      }
+  }
 }
 
-QUEUE_HOST = 'queue'
-CELERY_BROKER_URL = 'amqp://queue'
+QUEUE_HOST = config('QUEUE_HOST')
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+
+#Bucktes Minio variables
+MINIO_HOST = config('MINIO_HOST')
+ACCESS_KEY = config('ACCESS_KEY')
+SECRET_KEY = config('SECRET_KEY')
