@@ -15,4 +15,4 @@ djangorestframework-filters==1.0.0.dev0
 djangorestframework-simplejwt==5.2.2
 djoser
 drf_extra_fields
-minios
+minio
