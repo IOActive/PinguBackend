@@ -10,7 +10,11 @@ ACCESS_KEY = 'mK6kUOlDZ834q0wL'
 SECRET_KEY = 'Hq1cuslNaaAFcLXU6q45fqhrFGFG3UCO'
 QUEUE_HOST = 'queue'
 CELERY_BROKER_URL = 'amqp://queue'
-MONGO_HOST = 'mongodb://database:27017'
+MONGO_HOST = 'mongodb://localhost:27017/'
+MONGO_DB_PATH = '/home/xxxx/mounting_point/src/database'
+MINIO_ROOT_USER = 'minioadmin'
+MINIO_ROOT_PASSWORD = 'minioadmin'
+MINIO_STORAGE_PATH = '/home/xxxx/mounting_point/src/minio'
 ```
 
 # Install requeriments

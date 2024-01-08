@@ -11,6 +11,9 @@
             "program": "manage.py",
             "console": "integratedTerminal",
             "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/third_party"
+            },
             "args": [
                 "runserver",
                 "8086",

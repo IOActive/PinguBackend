@@ -1,5 +1,16 @@
 version: '3'
-services:  
+services:
+  
+  frontend:
+    depends_on:
+      - backend
+    hostname: 'frontend'
+    build:
+      context: ./
+      dockerfile: ./docker/frontend/Dockerfile
+    ports:
+      - '5000:5000'
+    
   database:
     image: mongo
     restart: always
@@ -11,19 +22,13 @@ services:
       - "27017:27017"
 
   backend:
-    image: pingubackend
-    build:
-      dockerfile: Dockerfile
-      context: .
-    ports:
-        - "8086:8080" # web
-        - "8087:8087" #Redis tasks
     depends_on:
-      - database
       - queue
-    environment:
-      - TERM=linux
-      - TERMINFO=/etc/terminfo
+      - database
+    hostname: 'backend'
+    build:
+      context: ./
+      dockerfile: ./docker/backend/Dockerfile
 
   queue:
     image: "rabbitmq:3-management"
@@ -32,11 +37,26 @@ services:
       - queue:/var/lib/rabbitmq
     environment:
       - RABBITMQ_ERLANG_COOKIE=s3cr3tc00ki3
+    # Uncomment for debugging purposes
+
     ports: 
       - '5672:5672'
       - '15672:15672'
     logging:
       driver: none
+
+  minio:
+    image: quay.io/minio/minio:RELEASE.2022-06-03T01-40-53Z
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_USER}
+    command: 'server /data --console-address ":9001"'
+
 
 volumes:
   db_data:
@@ -44,5 +64,12 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/roboboy/mounting_point/src/database' 
+      device: ${MONGO_DB_PATH}
+  minio_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${MINIO_STORAGE_PATH}
+  backend_data:
   queue:

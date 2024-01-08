@@ -1,4 +1,5 @@
 from PinguBackend.settings.base import *
+from decouple import config
 
 DATABASES = {
     'default': {
