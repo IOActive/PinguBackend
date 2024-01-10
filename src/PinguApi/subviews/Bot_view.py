@@ -32,14 +32,16 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
                 bot = Bot.objects.get(id=request.query_params['id'])
                 if bot.blobstore_log_path:
                     bot_logs_stream = download_bot_logs.apply(args=[str(bot.id), bot.blobstore_log_path]).get()
-                    bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
+                    if bot_logs_stream:
+                        bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
                 serializer = BotSerializer(bot)
                 return JsonResponse({"results": serializer.data}, safe=False)
             elif 'name' in request.query_params:
                 bot = Bot.objects.get(name=request.query_params['name'])
                 if bot.blobstore_log_path:
                     bot_logs_stream = download_bot_logs.apply(args=[str(bot.id), bot.blobstore_log_path]).get()
-                    bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
+                    if bot_logs_stream:
+                        bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
                 serializer = BotSerializer(bot)
                 return JsonResponse({"results": serializer.data}, safe=False)
             else:
@@ -47,7 +49,8 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
                 for bot in bots:
                     if bot.blobstore_log_path:
                         bot_logs_stream = download_bot_logs.apply(args=[str(bot.id), bot.blobstore_log_path]).get()
-                        bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
+                        if bot_logs_stream:
+                            bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
                 serializer = BotSerializer(bots, many=True)
                 return JsonResponse({"results": serializer.data}, safe=False)
         except ObjectDoesNotExist as e:
