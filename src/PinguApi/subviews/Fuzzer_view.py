@@ -38,21 +38,24 @@ class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin,
                 # get the fuzzer from db and modify the fuzzer_zip field with the blobstore_path from the bucket
                 fuzzer = Fuzzer.objects.get(id=request.query_params['id'])
                 fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
-                fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
+                if fuzzer_zip_stream:
+                    fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
                 serializer = FuzzerSerializer(fuzzer)
                 return JsonResponse({"results": serializer.data}, safe=False)
             elif 'name' in request.query_params:
                 # get the fuzzer from db and modify the fuzzer_zip field with the blobstore_path from the bucket
                 fuzzer = Fuzzer.objects.get(name=request.query_params['name'])
                 fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
-                fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
+                if fuzzer_zip_stream:
+                    fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
                 serializer = FuzzerSerializer(fuzzer)
                 return JsonResponse({"results": serializer.data}, safe=False)
             else:
                 fuzzers = self.get_queryset()
                 for fuzzer in fuzzers:
                     fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
-                    fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
+                    if fuzzer_zip_stream:
+                        fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
                 serializer = FuzzerSerializer(fuzzers, many=True)
                 return JsonResponse({"results": serializer.data}, safe=False)
         except ObjectDoesNotExist as e:
