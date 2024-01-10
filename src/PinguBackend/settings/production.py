@@ -24,8 +24,8 @@ CORS_ORIGIN_WHITELIST = (
 
 #Bucktes Minio variables
 MINIO_HOST = config('MINIO_HOST')
-ACCESS_KEY = config('ACCESS_KEY')
-SECRET_KEY = config('SECRET_KEY')
+MINIO_ACCESS_KEY = config('MINIO_ACCESS_KEY')
+MINIO_SECRET_KEY = config('MINIO_SECRET_KEY')
 
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_HOST = 'smtp.mailgun.org'

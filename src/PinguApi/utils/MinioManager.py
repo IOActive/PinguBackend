@@ -6,8 +6,8 @@ class MinioManger():
     def __init__ (self):
         self.client = Minio(
             endpoint=settings.MINIO_HOST,
-            access_key=settings.ACCESS_KEY,
-            secret_key=settings.SECRET_KEY,
+            access_key=settings.MINIO_ACCESS_KEY,
+            secret_key=settings.MINIO_SECRET_KEY,
             secure=False
         )
         
