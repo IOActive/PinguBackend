@@ -32,6 +32,7 @@ class Crash(models.Model):
     crash_frame = models.JSONField(null=True)
     crash_info = models.CharField(max_length=200, null=True, blank=True)
     crash_revision = models.IntegerField(default=1)
+    flaky_stack = models.BooleanField(default=False, null=True)
     
     
     def get_list(self):
