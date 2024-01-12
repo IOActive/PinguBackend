@@ -77,4 +77,4 @@ class TestCase(models.Model):
     # References
     job_id = models.ForeignKey(to=Job, on_delete=models.CASCADE, related_name="testcase_job")
     fuzzer_id = models.ForeignKey(to=Fuzzer, on_delete=models.CASCADE)
-    duplicate_of = models.ForeignKey(to="self", on_delete=models.CASCADE, related_name="duplicate_of", blank=True, null=True)
+    duplicate_of = models.ForeignKey(to="self", on_delete=models.CASCADE, blank=True, null=True)
