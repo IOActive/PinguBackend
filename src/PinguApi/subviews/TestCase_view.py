@@ -25,7 +25,7 @@ class TestCase_List_Create_APIView(generics.mixins.ListModelMixin,
     
     queryset = TestCase.objects.prefetch_related(Prefetch('crash_testcase', queryset=Crash.objects.select_related('testcase_id')))
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'job_id', 'job_id__project', 'crash_testcase__crash_type', 'crash_testcase__crash_state']
+    filterset_fields = ['id', 'job_id', 'job_id__project', 'crash_testcase__crash_type', 'crash_testcase__crash_state', 'crash_testcase__security_flag']
         
     serializer_class = TestCaseSerializer
 
