@@ -6,6 +6,7 @@ from PinguApi.submodels.Fuzzer import Fuzzer
 import uuid
 
 
+
 class TestCase(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending'
@@ -19,7 +20,7 @@ class TestCase(models.Model):
     bug_information = models.CharField(max_length=500, blank=True, null=True)
 
     # Testcase file
-    test_case = models.BinaryField()
+    test_case = models.CharField(max_length=20000)
     fixed = models.CharField(max_length=50, blank=True)
 
     # Did the bug only reproduced once ?
