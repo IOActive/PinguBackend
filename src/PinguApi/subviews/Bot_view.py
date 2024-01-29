@@ -44,7 +44,7 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
                     if bot_logs_stream:
                         bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
                 serializer = BotSerializer(bot)
-                return JsonResponse(self.get_paginated_response(serializer.data), safe=False)
+                return JsonResponse({"results": serializer.data}, safe=False)
             else:
                 bots = self.filter_queryset(self.get_queryset())
                 bots_page = self.paginate_queryset(bots)
