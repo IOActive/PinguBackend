@@ -27,9 +27,9 @@ class TestCase(models.Model):
     one_time_crasher_flag = models.BooleanField(default=False)
     comments = models.CharField(max_length=500, blank=True)
     # The file on the bot that generated the testcase.
-    absolute_path = models.CharField(max_length=200)
+    absolute_path = models.CharField(max_length=200, blank=True)
     # Queue to publish tasks
-    queue = models.CharField(max_length=50)
+    queue = models.CharField(max_length=50, blank=True)
     archived = models.BooleanField(default=False)
     timestamp = models.DateTimeField()
     status = models.CharField(
@@ -45,7 +45,7 @@ class TestCase(models.Model):
 
     # store paths for various things like original testcase, minimized
     # testcase, etc.
-    testcase_path = models.CharField(max_length=200)
+    testcase_path = models.CharField(max_length=200, blank=True)
     additional_metadata = models.CharField(max_length=500, blank=True)
 
     # Blobstore keys for various things like original testcase, minimized
@@ -70,7 +70,7 @@ class TestCase(models.Model):
     timeout_multiplier = models.FloatField(default=1.0)
 
     # State representing whether the fuzzed or minimized testcases are archived.
-    archive_state = models.IntegerField()
+    archive_state = models.IntegerField(default=0)
 
     # ASAN redzone size in bytes.
     redzone =  models.IntegerField(default=128)
