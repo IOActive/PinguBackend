@@ -50,12 +50,12 @@ class TestCase(models.Model):
 
     # Blobstore keys for various things like original testcase, minimized
     # testcase, etc.
-    fuzzed_keys = models.CharField(max_length=200, blank=True, null=True)
-    minimized_keys = models.CharField(max_length=200, blank=True, null=True)
-    minidump_keys = models.CharField(max_length=200, blank=True, null=True)
+    fuzzed_keys = models.CharField(max_length=200, blank=True, null=True, default="")
+    minimized_keys = models.CharField(max_length=200, blank=True, null=True, default="")
+    minidump_keys = models.CharField(max_length=200, blank=True, null=True, default="")
 
     # Minimized argument list.
-    minimized_arguments = models.CharField(max_length=200, blank=True, null=True)
+    minimized_arguments = models.CharField(max_length=200, blank=True, null=True, default="")
 
     # Flag indicating if UBSan detection should be disabled. This is needed for
     # cases when ASan and UBSan are bundled in the same build configuration
@@ -64,7 +64,7 @@ class TestCase(models.Model):
     disable_ubsan = models.BooleanField(default=False)
 
     # Regression range.
-    regression = models.CharField(max_length=200, blank=True, null=True)
+    regression = models.CharField(max_length=200, blank=True, null=True, default="")
 
     # Adjusts timeout based on multiplier value.
     timeout_multiplier = models.FloatField(default=1.0)
