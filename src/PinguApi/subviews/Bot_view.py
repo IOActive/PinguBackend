@@ -27,6 +27,7 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
     serializer_class = BotSerializer
     
     def get(self, request, *args, **kwargs):
+        
         try:
             if 'id' in request.query_params:
                 bot = Bot.objects.get(id=request.query_params['id'])
@@ -43,16 +44,17 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
                     if bot_logs_stream:
                         bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
                 serializer = BotSerializer(bot)
-                return JsonResponse({"results": serializer.data}, safe=False)
+                return JsonResponse(self.get_paginated_response(serializer.data), safe=False)
             else:
-                bots = self.get_queryset()
-                for bot in bots:
+                bots = self.filter_queryset(self.get_queryset())
+                bots_page = self.paginate_queryset(bots)
+                for bot in bots_page:
                     if bot.blobstore_log_path:
                         bot_logs_stream = download_bot_logs.apply(args=[str(bot.id), bot.blobstore_log_path]).get()
                         if bot_logs_stream:
                             bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
-                serializer = BotSerializer(bots, many=True)
-                return JsonResponse({"results": serializer.data}, safe=False)
+                serializer = BotSerializer(bots_page, many=True)
+                return self.get_paginated_response(serializer.data)
         except ObjectDoesNotExist as e:
             return JsonResponse({"results": {}}, safe=False)
 
