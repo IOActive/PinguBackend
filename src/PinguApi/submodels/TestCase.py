@@ -75,6 +75,14 @@ class TestCase(models.Model):
     # ASAN redzone size in bytes.
     redzone =  models.IntegerField(default=128)
 
+    # Testcase timeout.
+    timeout = models.IntegerField(blank=True, null=True)
+
+    # Number of retries for this testcase.
+    retries = models.IntegerField(blank=True, null=True)
+
+    quiet_flag = models.BooleanField(default=False)
+
     # References
     job_id = models.ForeignKey(to=Job, on_delete=models.CASCADE, related_name="testcase_job")
     fuzzer_id = models.ForeignKey(to=Fuzzer, on_delete=models.CASCADE)
