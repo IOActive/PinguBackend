@@ -12,12 +12,13 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from PinguApi.utils.EnablePartialUpdateMixin import EnablePartialUpdateMixin
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class JobTemplate_List_Create_APIView(generics.mixins.ListModelMixin, 
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
