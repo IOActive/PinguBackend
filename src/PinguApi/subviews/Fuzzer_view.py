@@ -34,31 +34,14 @@ class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin,
     
     def get(self, request, *args, **kwargs):
         try:
-            if 'id' in request.query_params:
-                # get the fuzzer from db and modify the fuzzer_zip field with the blobstore_path from the bucket
-                fuzzer = Fuzzer.objects.get(id=request.query_params['id'])
+            fuzzers = self.filter_queryset(self.get_queryset())
+            fuzzers_page = self.paginate_queryset(fuzzers)
+            for fuzzer in fuzzers_page:
                 fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
                 if fuzzer_zip_stream:
                     fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
-                serializer = FuzzerSerializer(fuzzer)
-                return JsonResponse({"results": serializer.data}, safe=False)
-            elif 'name' in request.query_params:
-                # get the fuzzer from db and modify the fuzzer_zip field with the blobstore_path from the bucket
-                fuzzer = Fuzzer.objects.get(name=request.query_params['name'])
-                fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
-                if fuzzer_zip_stream:
-                    fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
-                serializer = FuzzerSerializer(fuzzer)
-                return JsonResponse({"results": serializer.data}, safe=False)
-            else:
-                fuzzers = self.filter_queryset(self.get_queryset())
-                fuzzers_page = self.paginate_queryset(fuzzers)
-                for fuzzer in fuzzers_page:
-                    fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
-                    if fuzzer_zip_stream:
-                        fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
-                serializer = FuzzerSerializer(fuzzers, many=True)
-                return self.get_paginated_response(serializer.data)
+            serializer = FuzzerSerializer(fuzzers, many=True)
+            return self.get_paginated_response(serializer.data)
         except ObjectDoesNotExist as e:
             return JsonResponse({"results": {}}, safe=False)
             
