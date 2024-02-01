@@ -18,7 +18,7 @@ class JobTemplate_List_Create_APIView(generics.mixins.ListModelMixin,
                       generics.mixins.CreateModelMixin,
                       generics.GenericAPIView):
     
-    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
@@ -27,6 +27,7 @@ class JobTemplate_List_Create_APIView(generics.mixins.ListModelMixin,
     serializer_class = JobTemplateSerializer
     
     queryset = JobTemplate.objects.all()
+    paginator = None
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
