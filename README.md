@@ -10,7 +10,7 @@ The project offers the following features:
 
 # Basic configuration
 
-You will need to create a .env to store your secrets. Eg,:
+It is necesary  to create a .env to store your secrets in case the backend is launched without using the butler command line.
 
 * Docker dev example
 
@@ -38,7 +38,11 @@ pip install -r requeriments
 
 ### Secondary services
 
-The easyest way to run all the secundary services is by using docker containers. The docker-compose files include a production and testing configuration for you to deploy the MongoDb, RabbitMq and the Minio Buckets
+The easyest way to run all the secundary services is by using docker containers. The docker-compose files include a production and testing configuration for you to deploy the MongoDb, RabbitMq and the Minio Buckets.
+
+```bash
+docker-compose up -f docker-compose-dev.yml --no-log-prefix -d database queue minio
+```
 
 # Run server
 
@@ -51,13 +55,25 @@ python manage.py createsuperuser
 
 ```
 
-## API Documentation
+# API Documentation
 
 By default the Swagger UI is enable in the backend for testing propueses, there you can find all the API documentation and interacte live this all the requests. Additionally, the API is also documented [here](docs/api.md "docs/api.md")
 
-## MongoDB schema
+# MongoDB schema
 
-## Misc
+![db](docs/Db/PinguCrew.png)
+
+# Minio Dashboard
+
+In the [Minio dashboard](http://127.0.0.1:9001) you can configure and view everything about the buckets.
+
+![dashboard](docs/pics/minio_dashboard.png)
+
+In order to create the Minio access token for the bots and the Django backend, you can generate new token iun the Service Accounts page:
+
+![accounts](docs/pics/minio_access_token.png)
+
+# Misc
 
 Export MongoDb schema
 
