@@ -3,11 +3,12 @@
 import os
 import sys
 from django.conf import settings 
-from PinguBackend.environment import SETTINGS_MODULE
+from src.PinguBackend.environment import SETTINGS_MODULE
 
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_MODULE)
+    sys.path.insert(0, os.path.abspath(os.path.join('src')))
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

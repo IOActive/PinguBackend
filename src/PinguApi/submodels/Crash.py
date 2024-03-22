@@ -17,7 +17,7 @@ class Crash(models.Model):
     crash_address = models.CharField(max_length=50, blank=True, null=True)
     crash_state = models.CharField(max_length=20000)
     crash_stacktrace = models.CharField(max_length=20000)
-    regression = models.CharField(max_length=200)
+    regression = models.CharField(max_length=200, blank=True, null=True)
     security_severity = models.IntegerField(null=True, blank=True)
     absolute_path = models.CharField(max_length=500)
     security_flag = models.BooleanField()
@@ -32,6 +32,7 @@ class Crash(models.Model):
     crash_frame = models.JSONField(null=True)
     crash_info = models.CharField(max_length=200, null=True, blank=True)
     crash_revision = models.IntegerField(default=1)
+    flaky_stack = models.BooleanField(default=False, null=True)
     
     
     def get_list(self):

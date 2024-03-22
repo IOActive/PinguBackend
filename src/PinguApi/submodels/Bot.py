@@ -21,7 +21,7 @@ class Bot(models.Model):
     last_beat_time = models.DateTimeField(null=True, blank=True)
 
     # Task payload containing information on current task execution.
-    task_payload = models.CharField(max_length=200, blank=True)
+    task_payload = models.CharField(max_length=200, blank=True, null=True)
 
     # Expected end time for task.
     task_end_time = models.DateTimeField(null=True, blank=True)
@@ -37,4 +37,10 @@ class Bot(models.Model):
     platform = models.CharField(max_length=50,
                                 default='NA',
                                 choices=Supported_Platforms.choices)
+    
+    # Blobstore path or URL for this fuzzer.
+    blobstore_log_path = models.CharField(max_length=200, default="", blank=True, null=True)
+
+    # Text file containing the bot logs. Dont store it to the Database just keep the blob data.
+    bot_logs = models.FileField(upload_to='tmp', null=True, verbose_name="")
     

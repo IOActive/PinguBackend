@@ -1,5 +1,5 @@
 from PinguApi.utils.MinioManager import MinioManger
-from PinguApi.tasks import upload_fuzzer_to_bucket, download_fuzzer_from_bucket, remove_fuzzer_from_bucket
+from PinguApi.tasks import upload_fuzzer_to_bucket, download_fuzzer_from_bucket, remove_fuzzer_from_bucket, download_bot_logs
 from minio.helpers import ObjectWriteResult
 from unittest.mock import MagicMock, ANY, patch
 from django.test import TestCase
@@ -52,3 +52,7 @@ class TaskTests(TestCase):
         upload_fuzzer_to_bucket(self.fuzzer_zip, 'test.zip')
         result = remove_fuzzer_from_bucket("fuzzers/test.zip")
         assert result == None
+
+    def test_download_bot_logs(self):
+        logs = download_bot_logs(bot_id='4e63f439-1e3d-4ccb-a193-c47188a85ab9')
+        assert len(logs) > 0

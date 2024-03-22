@@ -6,6 +6,7 @@ from PinguApi.submodels.Fuzzer import Fuzzer
 import uuid
 
 
+
 class TestCase(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending'
@@ -19,16 +20,16 @@ class TestCase(models.Model):
     bug_information = models.CharField(max_length=500, blank=True, null=True)
 
     # Testcase file
-    test_case = models.BinaryField()
+    test_case = models.CharField(max_length=20000)
     fixed = models.CharField(max_length=50, blank=True)
 
     # Did the bug only reproduced once ?
     one_time_crasher_flag = models.BooleanField(default=False)
     comments = models.CharField(max_length=500, blank=True)
     # The file on the bot that generated the testcase.
-    absolute_path = models.CharField(max_length=200)
+    absolute_path = models.CharField(max_length=200, blank=True)
     # Queue to publish tasks
-    queue = models.CharField(max_length=50)
+    queue = models.CharField(max_length=50, blank=True)
     archived = models.BooleanField(default=False)
     timestamp = models.DateTimeField()
     status = models.CharField(
@@ -44,17 +45,17 @@ class TestCase(models.Model):
 
     # store paths for various things like original testcase, minimized
     # testcase, etc.
-    testcase_path = models.CharField(max_length=200)
+    testcase_path = models.CharField(max_length=200, blank=True)
     additional_metadata = models.CharField(max_length=500, blank=True)
 
     # Blobstore keys for various things like original testcase, minimized
     # testcase, etc.
-    fuzzed_keys = models.CharField(max_length=200, blank=True, null=True)
-    minimized_keys = models.CharField(max_length=200, blank=True, null=True)
-    minidump_keys = models.CharField(max_length=200, blank=True, null=True)
+    fuzzed_keys = models.CharField(max_length=200, blank=True, null=True, default="")
+    minimized_keys = models.CharField(max_length=200, blank=True, null=True, default="")
+    minidump_keys = models.CharField(max_length=200, blank=True, null=True, default="")
 
     # Minimized argument list.
-    minimized_arguments = models.CharField(max_length=200, blank=True, null=True)
+    minimized_arguments = models.CharField(max_length=200, blank=True, null=True, default="")
 
     # Flag indicating if UBSan detection should be disabled. This is needed for
     # cases when ASan and UBSan are bundled in the same build configuration
@@ -63,17 +64,26 @@ class TestCase(models.Model):
     disable_ubsan = models.BooleanField(default=False)
 
     # Regression range.
-    regression = models.CharField(max_length=200, blank=True, null=True)
+    regression = models.CharField(max_length=200, blank=True, null=True, default="")
 
     # Adjusts timeout based on multiplier value.
     timeout_multiplier = models.FloatField(default=1.0)
 
     # State representing whether the fuzzed or minimized testcases are archived.
-    archive_state = models.IntegerField()
+    archive_state = models.IntegerField(default=0)
 
     # ASAN redzone size in bytes.
     redzone =  models.IntegerField(default=128)
 
+    # Testcase timeout.
+    timeout = models.IntegerField(blank=True, null=True)
+
+    # Number of retries for this testcase.
+    retries = models.IntegerField(blank=True, null=True)
+
+    quiet_flag = models.BooleanField(default=False)
+
     # References
     job_id = models.ForeignKey(to=Job, on_delete=models.CASCADE, related_name="testcase_job")
     fuzzer_id = models.ForeignKey(to=Fuzzer, on_delete=models.CASCADE)
+    duplicate_of = models.ForeignKey(to="self", on_delete=models.CASCADE, blank=True, null=True)

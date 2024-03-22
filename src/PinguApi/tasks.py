@@ -9,6 +9,20 @@ import io
 
 logger = get_task_logger(__name__)
 
+@shared_task(name="download_bot_logs")
+def download_bot_logs(bot_id, bucket_name):
+    try:
+        bucket_client = MinioManger()
+        # get the rest of the path
+        result = bucket_client.get_object(bucketName=bucket_name, fileName=f'{bot_id}/bot.log')
+        logger.info("download_fuzzer_from_bucket")
+        if result.data:
+            return result.data
+        else:
+            return b'/Empty'
+    except Exception as e:
+        logger.error(e)
+
 
 @shared_task(name="upload_fuzzer_to_bucket")
 def upload_fuzzer_to_bucket(zip_file_stream, zip_filename):

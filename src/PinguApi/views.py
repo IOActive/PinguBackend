@@ -20,3 +20,5 @@ from PinguApi.subviews.Task_view import Task_APIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+
+# TODO: add fuzzer big query data view from bucket data. Should I store it in the DB?

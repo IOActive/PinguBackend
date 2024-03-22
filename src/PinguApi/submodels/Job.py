@@ -25,7 +25,7 @@ class Job(models.Model):
                                 choices=Supported_Platforms.choices)
     
     # Job environment string.
-    environment_string = models.CharField(max_length=200, blank=True, null=False, default="CUSTOM_BINARY=false")
+    environment_string = models.CharField(max_length=2000, blank=True, null=False, default="CUSTOM_BINARY=false")
     # Template to use, if any.
     template = models.ForeignKey(to=JobTemplate, on_delete=models.CASCADE, blank=True, null=True, default=None)
     # Blobstore key of the custom binary for this job.

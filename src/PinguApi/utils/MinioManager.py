@@ -6,8 +6,8 @@ class MinioManger():
     def __init__ (self):
         self.client = Minio(
             endpoint=settings.MINIO_HOST,
-            access_key=settings.ACCESS_KEY,
-            secret_key=settings.SECRET_KEY,
+            access_key=settings.MINIO_ACCESS_KEY,
+            secret_key=settings.MINIO_SECRET_KEY,
             secure=False
         )
         
@@ -29,8 +29,8 @@ class MinioManger():
     def listBuckets(self):
         return self.client.list_buckets()
     
-    def listObjects(self, bucketName):
-        return self.client.list_objects(bucketName)
+    def listObjects(self, bucketName, recursive=False):
+        return self.client.list_objects(bucketName, recursive=recursive)
     
     def get_object(self, bucketName, fileName):
         return self.client.get_object(bucketName, fileName)

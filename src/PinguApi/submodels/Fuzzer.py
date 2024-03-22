@@ -15,7 +15,7 @@ class Fuzzer(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
     # The name of the archive that the user uploaded.
-    filename = models.CharField(max_length=50)
+    filename = models.CharField(max_length=50, default="")
     
     # Zip file containing the fuzzer. Dont store it to the Database just keep the blob data.
     fuzzer_zip = models.FileField(upload_to='tmp', null=True, verbose_name="")

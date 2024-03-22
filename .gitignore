@@ -4,6 +4,7 @@
 .vscode-copy/*
 .vscode copy/launch.json
 .vscode copy/settings.json
+third_party/*
 
 Skip to content
 
@@ -224,3 +225,4 @@ tests/backend/api/__pycache__/__init__.cpython-310.pyc
 tests/backend/api/__pycache__/__init__.cpython-310.pyc
 PinguBackend/media/tmp/*
 tmp/*
+config
