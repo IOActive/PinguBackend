@@ -32,5 +32,6 @@ class JobSerializer(serializers.ModelSerializer):
                   'template',
                   'custom_binary_path',
                   'custom_binary_filename',
-                  'custom_binary_revision'
+                  'custom_binary_revision',
+                  'custom_binary_key',
                   )
