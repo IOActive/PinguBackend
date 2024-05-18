@@ -13,3 +13,5 @@
 # limitations under the License.
 
 
+import django
+django.setup()
