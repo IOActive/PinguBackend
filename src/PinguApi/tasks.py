@@ -94,7 +94,7 @@ def upload_custom_binary_to_bucket(zip_file_stream, zip_filename):
         size_in_bytes = len(file_stream.getbuffer())
         
         bucket_client = MinioManger()
-        result = bucket_client.put_object(bucketName=os.environ.get['BLOBS_BUCKET'], name=zip_filename, data=file_stream, size=size_in_bytes)
+        result = bucket_client.put_object(bucketName=os.environ.get('BLOBS_BUCKET'), name=zip_filename, data=file_stream, size=size_in_bytes)
         logger.info("upload_custom_binary_to_bucket")
         blobstore_path = f"{result.bucket_name}/{result.object_name}"
         
