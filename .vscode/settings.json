@@ -1,7 +1,16 @@
 {
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
+    "python.envFile": "${workspaceFolder}/pytest.ini",
+    "python.testing.cwd": "src",
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./src",
+        "-p",
+        "test_*.py"
+    ],
     "python.testing.pytestArgs": [
-        "."
+        "./src"
     ],
 }
