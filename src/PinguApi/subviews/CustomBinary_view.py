@@ -70,7 +70,7 @@ class CustomBinary_APIView(APIView):
         body = request.data
         custom_binanry = body.get('custom_binary')
         job_id = body.get('job_id')
-        file_name = body.get('file_name')
+        file_name = body.get('filename')
         
         if custom_binanry is None and file_name:
             response = Response({'success': False, 'msg': 'Custom binary not specified'})
@@ -91,7 +91,7 @@ class CustomBinary_APIView(APIView):
             blobstore_path, size_in_bytes = upload_custom_binary_to_bucket.apply(args=[file, blob_name]).get()
                        
             job.custom_binary_filename = file_name
-            job.custom_binary_filename = file_name
+            job.custom_binary_key = blob_name
             job.custom_binary_path = blobstore_path
             job.environment_string += f"\nCUSTOM_BINARY = {file_name}\n"
             

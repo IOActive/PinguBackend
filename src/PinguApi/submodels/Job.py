@@ -45,7 +45,7 @@ class Job(models.Model):
     # Blobstore key of the custom binary for this job.
     custom_binary_key = models.CharField(max_length=50, blank=True, null=True, default=None)
     # Blobstore path of the custom binary for this job.
-    custom_binary_path = models.CharField(max_length=50, blank=True, null=True, default=None)
+    custom_binary_path = models.CharField(max_length=500, blank=True, null=True, default=None)
     # Filename for the custom binary.
     custom_binary_filename = models.CharField(max_length=50, blank=True, null=True, default=None)
     # Revision of the custom binary.
