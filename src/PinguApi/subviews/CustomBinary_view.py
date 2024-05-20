@@ -85,7 +85,7 @@ class CustomBinary_APIView(APIView):
         else:
             job = Job.objects.get(id=job_id)
             
-            file = base64.b64decode(custom_binanry)
+            file = base64.b64decode(custom_binanry.split(',')[-1])
             
             blob_name = str(uuid.uuid4())
             blobstore_path, size_in_bytes = upload_custom_binary_to_bucket.apply(args=[file, blob_name]).get()

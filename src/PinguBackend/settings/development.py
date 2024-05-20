@@ -32,7 +32,7 @@ CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8086',
+    'http://localhost:8081',
 )
 
 #Bucktes Minio variables
