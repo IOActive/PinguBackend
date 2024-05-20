@@ -25,12 +25,14 @@ DATABASES = {
   }
 }
 
+ALLOWED_HOSTS = ['testserver', 'localhost']
+
 QUEUE_HOST = config('QUEUE_HOST')
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8081',
+    'http://localhost:8086',
 )
 
 #Bucktes Minio variables
