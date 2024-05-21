@@ -145,7 +145,8 @@ def upload_corpus_to_bucket(zip_file_stream, project_name, fuzzzer_name, fuzztar
             for file in zf.infolist():
                 file_stream_bytes = io.BytesIO(zf.open(file).read())
                 size_in_bytes = len(file_stream_bytes.getbuffer())
-                file_path = f"{fuzzzer_name}/{project_name}_{fuzztarget_name}/{file.filename}"
+                file_name = file.filename.split("/")[-1]
+                file_path = f"{fuzzzer_name}/{project_name}_{fuzztarget_name}/{file_name}"
                 result = bucket_client.put_object(bucketName=os.environ.get('CORPUS_BUCKET'), name=file_path, data=file_stream_bytes, size=size_in_bytes)
                 logger.info("upload_corpus_to_bucket")
                 blobstore_path = f"{result.bucket_name}/{result.object_name}"
