@@ -83,7 +83,12 @@ class CustomBinary_APIView(APIView):
             return response
         
         else:
-            job = Job.objects.get(id=job_id)
+            try:
+                job = Job.objects.get(id=job_id)
+            except Exception:
+                response = Response({'success': False, 'msg': f"Job with id {job_id} does not exist"})
+                response.status_code = 404
+                return response
             
             file = base64.b64decode(custom_binanry.split(',')[-1])
             

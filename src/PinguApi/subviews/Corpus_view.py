@@ -46,13 +46,23 @@ class Corpus_APIView(APIView):
                 response.status_code = 400
                 return response
             
-            else:
-                job = Job.objects.get(id=job_id)
-                fuzzer = Fuzzer.objects.get(id=engine_id)
+            else:     
+                try:
+                    job = Job.objects.get(id=job_id)
+                except Exception:
+                    response = Response({'success': False, 'msg': f"Job with id {job_id} does not exist"})
+                    response.status_code = 404
+                    return response
+                try:
+                    fuzzer = Fuzzer.objects.get(id=engine_id)
+                except Exception:
+                    response = Response({'success': False, 'msg': f"Engine with id {engine_id} does not exist"})
+                    response.status_code = 404
+                    return response
+                
                 
                 project_name = job.name
                 fuzzzer_name = fuzzer.name
-                
                 file = base64.b64decode(corpus_binary.split(',')[-1])
                 
                 blobstore_path, size_in_bytes = upload_corpus_to_bucket.apply(args=[file, project_name, fuzzzer_name, fuzztarget_name]).get()
