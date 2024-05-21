@@ -134,3 +134,56 @@ def remove_custom_binary_from_bucket(blobstore_path):
     except Exception as e:
         logger.error(e)
         
+        
+@shared_task(name="upload_corpus_to_bucket")
+def upload_corpus_to_bucket(zip_file_stream, project_name, fuzzzer_name, fuzztarget_name):
+    try:
+        zip_file_stream_bytes = io.BytesIO(zip_file_stream)
+        bucket_client = MinioManger()
+
+        with zipfile.ZipFile(zip_file_stream_bytes) as zf:
+            for file in zf.infolist():
+                file_stream_bytes = io.BytesIO(zf.open(file).read())
+                size_in_bytes = len(file_stream_bytes.getbuffer())
+                file_name = file.filename.split("/")[-1]
+                file_path = f"{fuzzzer_name}/{project_name}_{fuzztarget_name}/{file_name}"
+                result = bucket_client.put_object(bucketName=os.environ.get('CORPUS_BUCKET'), name=file_path, data=file_stream_bytes, size=size_in_bytes)
+                logger.info("upload_corpus_to_bucket")
+                blobstore_path = f"{result.bucket_name}/{result.object_name}"
+        
+        return blobstore_path, size_in_bytes
+    except Exception as e:
+        logger.error(e)
+           
+@shared_task(name="download_corpus_from_bucket")
+def download_corpus_from_bucket(blobstore_path):
+    try:
+        bucket_client = MinioManger()
+        # get the root directory and the rest of the path in two new strings
+        splitted_path = blobstore_path.split('/', 1)
+        bucket_name = splitted_path[0]
+        # get the rest of the path
+        fileName = splitted_path[1]
+        # get the file from the bucket
+        result = bucket_client.get_object(bucketName=bucket_name, fileName=fileName)
+        logger.info("download_corpus_from_bucket")
+        return result.data
+    except Exception as e:
+        logger.error(e)
+        
+@shared_task(name="remove_corpus_from_bucket")
+def remove_corpus_from_bucket(blobstore_path):
+    try:
+        bucket_client = MinioManger()
+        # get the root directory and the rest of the path in two new strings
+        splitted_path = blobstore_path.split('/', 1)
+        bucket_name = splitted_path[0]
+        # get the rest of the path
+        fileName = splitted_path[1]
+        # get the file from the bucket
+        result = bucket_client.remove_object(bucketName=bucket_name, fileName=fileName)
+        logger.info("remove_corpus_from_bucket")
+        return result
+    except Exception as e:
+        logger.error(e)
+        
