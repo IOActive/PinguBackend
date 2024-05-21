@@ -74,5 +74,7 @@ urlpatterns = [
     path('', include(('PinguApi.routers', 'PinguApi'), namespace='core-api')),
     
     path('custom_binary/', views.CustomBinary_APIView.as_view(), name='custom_binary'),
+    
+    path('corpus/', views.Corpus_APIView.as_view(), name="corpus upload"),
 
 ]

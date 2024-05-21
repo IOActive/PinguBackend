@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from PinguApi.utils.MinioManager import MinioManger
-from PinguApi.tasks import upload_fuzzer_to_bucket, download_fuzzer_from_bucket, remove_fuzzer_from_bucket, download_bot_logs, \
+from PinguApi.tasks import upload_corpus_to_bucket, upload_fuzzer_to_bucket, download_fuzzer_from_bucket, remove_fuzzer_from_bucket, download_bot_logs, \
     upload_custom_binary_to_bucket, remove_custom_binary_from_bucket
 from minio.helpers import ObjectWriteResult
 from unittest.mock import MagicMock, ANY, patch
@@ -103,3 +103,28 @@ class TaskTests(TestCase):
         upload_custom_binary_to_bucket(self.test_zip, 'test.zip')
         result = remove_custom_binary_from_bucket("fuzzers/test.zip")
         assert result == None
+        
+    @patch.object(MinioManger, 'put_object')
+    def test_upload_corpus_to_bucket(self, mock_put_object: MagicMock):
+        # Create a BytesIO object with some test data
+        file_stream = self.test_zip
+
+        # Create a mocked ObjectWriteResult object
+        mock_result = MagicMock(spec=ObjectWriteResult)
+        mock_result.bucket_name = 'test_bucket'
+        mock_result.object_name = 'test_object'
+        mock_result.version_id = 'test_version'
+        mock_result.etag = 'test_etag'
+        mock_result.last_modified = 'test_last_modified'
+
+        # Set the return value of the mock_put_object method
+        mock_put_object.return_value = mock_result
+
+        # Call the upload_fuzzer_to_bucket function
+        result = upload_corpus_to_bucket(file_stream, "test_project", "test_fuzzer", "test_fuzzTarget")
+
+        # Assert that the put_object method was called with the correct arguments
+        mock_put_object.assert_called_once()
+
+        # Assert that the function returned the correct values
+        assert result == ('test_bucket/test_object', 212)
