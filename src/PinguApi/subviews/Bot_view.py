@@ -47,9 +47,11 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
             bots_page = self.paginate_queryset(bots)
             for bot in bots_page:
                 if bot.blobstore_log_path:
-                    bot_logs_stream = download_bot_logs.apply(args=[str(bot.id), bot.blobstore_log_path]).get()
+                    bot_logs_stream = download_bot_logs.apply(args=[str(bot.id)]).get()
                     if bot_logs_stream:
                         bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
+                else:
+                    bot.bot_logs = base64.b64encode('No logs available'.encode()).decode('utf-8')
             serializer = BotSerializer(bots_page, many=True)
             return self.get_paginated_response(serializer.data)
         except ObjectDoesNotExist as e:

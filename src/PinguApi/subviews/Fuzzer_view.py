@@ -51,9 +51,10 @@ class Fuzzer_List_Create_APIView(generics.mixins.ListModelMixin,
             fuzzers = self.filter_queryset(self.get_queryset())
             fuzzers_page = self.paginate_queryset(fuzzers)
             for fuzzer in fuzzers_page:
-                fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
-                if fuzzer_zip_stream:
-                    fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
+                if not fuzzer.builtin:
+                    fuzzer_zip_stream = download_fuzzer_from_bucket.apply(args=[fuzzer.blobstore_path]).get()
+                    if fuzzer_zip_stream:
+                        fuzzer.fuzzer_zip = base64.b64encode(fuzzer_zip_stream).decode('utf-8')
             serializer = FuzzerSerializer(fuzzers, many=True)
             return self.get_paginated_response(serializer.data)
         except ObjectDoesNotExist as e:
