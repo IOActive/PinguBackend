@@ -50,6 +50,8 @@ class Bot_List_Create_APIView(generics.mixins.ListModelMixin,
                     bot_logs_stream = download_bot_logs.apply(args=[str(bot.id)]).get()
                     if bot_logs_stream:
                         bot.bot_logs = base64.b64encode(bot_logs_stream).decode('utf-8')
+                else:
+                    bot.bot_logs = base64.b64encode('No logs available'.encode()).decode('utf-8')
             serializer = BotSerializer(bots_page, many=True)
             return self.get_paginated_response(serializer.data)
         except ObjectDoesNotExist as e:
