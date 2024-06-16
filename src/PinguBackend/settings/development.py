@@ -25,6 +25,8 @@ DATABASES = {
   }
 }
 
+ALLOWED_HOSTS = ['testserver', 'localhost']
+
 QUEUE_HOST = config('QUEUE_HOST')
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 

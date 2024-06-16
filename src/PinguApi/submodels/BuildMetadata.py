@@ -15,14 +15,19 @@
 import datetime
 from django.db import models
 from PinguApi.submodels.Job import Job
+from PinguApi.submodels.Build import Build
 import uuid
 
 class BuildMetadata(models.Model):
     """Metadata associated with a particular archived build."""
     # UUID
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
     # Job type that this build belongs to.
     job = models.ForeignKey(to=Job, on_delete=models.CASCADE, default=None, null=True)
+    
+    # Build type that this build belongs to.
+    build = models.ForeignKey(to=Build, on_delete=models.CASCADE, default=None, null=True)
 
     # Revision of the build.
     revision = models.IntegerField(default=1)

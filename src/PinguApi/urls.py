@@ -72,5 +72,13 @@ urlpatterns = [
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     
     path('', include(('PinguApi.routers', 'PinguApi'), namespace='core-api')),
+    
+    path('custom_binary/', views.CustomBinary_APIView.as_view(), name='custom_binary'),
+    
+    path('corpus/', views.Corpus_APIView.as_view(), name="corpus upload"),
+    
+    path("build/", views.Build_List_Create_APIView.as_view(), name='Build List Create'),
+    path('build/<uuid:pk>/', views.Build_Update_Delete_APIView.as_view(), name="Build update/delete"),
+
 
 ]

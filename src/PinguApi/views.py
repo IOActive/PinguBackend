@@ -31,6 +31,9 @@ from PinguApi.subviews.TestCaseVariant_view import TestCaseVariant_List_Create_A
 from PinguApi.subviews.Trial_view import Trial_List_Create_APIView, Trial_Update_Delete_APIView
 from PinguApi.subviews.Crash_view import Crash_List_Create_APIView, Crash_Update_Delete_APIView
 from PinguApi.subviews.Task_view import Task_APIView
+from PinguApi.subviews.CustomBinary_view import CustomBinary_APIView
+from PinguApi.subviews.Corpus_view import Corpus_APIView
+from PinguApi.subviews.Build_view import Build_List_Create_APIView, Build_Update_Delete_APIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
