@@ -13,5 +13,17 @@
 # limitations under the License.
 
 
+import os
 import django
+from django.test.utils import setup_databases, setup_test_environment
+from src.scripts.load_config_to_env import load_config_env
+
+# load backend component configuration into enviroment context
+load_config_env("config/system/config.yaml")
+load_config_env("config/redis/config.yaml")
+load_config_env("config/database/config.yaml")
+load_config_env("config/minio/config.yaml")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'PinguBackend.settings.development')  # replace with your project name
 django.setup()
+#if os.getcwd().split('/')[-1] != 'src':
+#    os.chdir(os.getcwd()+'/src')

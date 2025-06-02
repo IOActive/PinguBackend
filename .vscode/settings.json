@@ -1,9 +1,0 @@
-{
-    "python.testing.pytestEnabled": false,
-    "python.testing.unittestEnabled": true,
-    "python.envFile": "${workspaceFolder}/pytest.ini",
-    "python.testing.cwd": "src",
-    "python.testing.pytestArgs": [
-        "src"
-    ],
-}

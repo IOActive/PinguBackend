@@ -17,10 +17,18 @@
 import os
 import sys
 from django.conf import settings 
+from src.scripts.load_config_to_env import load_config_env
 from src.PinguBackend.environment import SETTINGS_MODULE
 
 def main():
     """Run administrative tasks."""
+    
+    # load backend component configuration into enviroment context
+    load_config_env("config/system/config.yaml")
+    load_config_env("config/redis/config.yaml")
+    load_config_env("config/database/config.yaml")
+    load_config_env("config/minio/config.yaml")
+    
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_MODULE)
     sys.path.insert(0, os.path.abspath(os.path.join('src')))
     try:

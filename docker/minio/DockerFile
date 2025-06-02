@@ -1,0 +1,32 @@
+# Step 1: Use a minimal Debian image
+FROM debian:bookworm-slim
+
+# Step 2: Install Python, pip, curl, and MinIO dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    curl \
+    bash \
+    ca-certificates \
+    libzstd1 \
+    libz-dev \
+    libssl-dev \
+    libc6 \
+    zlib1g && \
+    rm -rf /var/lib/apt/lists/*
+
+# Step 3: Install MinIO
+RUN curl https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20250228095516.0.0_amd64.deb -o minio.deb
+RUN dpkg -i minio.deb
+
+# Step 4: Expose necessary ports
+EXPOSE 9000
+
+# Step 5: Set environment variables for MinIO (optional)
+ENV MINIO_ROOT_USER=root_user
+ENV MINIO_ROOT_PASSWORD=root_password
+
+# Step 6: Set MinIO as the command to run
+CMD ["minio"]

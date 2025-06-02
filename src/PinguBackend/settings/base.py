@@ -27,7 +27,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+from celery.schedules import crontab
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,38 +38,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+SECRET_KEY = config("SECRET_KEY")
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Django REST framework 
-    'rest_framework',
+    # Django REST framework
+    "rest_framework",
     # CORS
-    'corsheaders',
-    'PinguApi.apps.PinguapiConfig',
-    'rest_framework.authtoken',
-    'django_filters',
-    'drf_yasg',
-    'rest_framework_filters',
-    'djoser',
+    "corsheaders",
+    "PinguApi.apps.PinguapiConfig",
+    "rest_framework.authtoken",
+    "django_filters",
+    "drf_yasg",
+    "rest_framework_filters",
+    "djoser",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
     # CORS
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -75,37 +73,32 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'django.middleware.common.CommonMiddleware',
+    "django.middleware.common.CommonMiddleware",
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ),
-    
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', ),
-    
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    
-    'TEST_REQUEST_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer'],
-    
-    'DATE_INPUT_FORMATS': ["%Y-%m-%dT%H:%M:%S.%f", ],
-    
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "TEST_REQUEST_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DATE_INPUT_FORMATS": [
+        "%Y-%m-%dT%H:%M:%S.%f",
     ],
-    
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5,
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "EXCEPTION_HANDLER": "PinguApi.exceptions.custom_exception_handler.custom_exception_handler",
+    'TEST_REQUEST_RENDERER_CLASSES': [
+        'rest_framework.renderers.MultiPartRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer'
+    ],
 }
-
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8081',
-)
 
 ROOT_URLCONF = "PinguBackend.urls"
 
@@ -125,7 +118,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "PinguBackend.wsgi.application"
+#WSGI_APPLICATION = "PinguBackend.wsgi.application"
 
 
 # Password validation
@@ -158,7 +151,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%f'
+DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -172,34 +165,48 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
-#MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-#MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+# MEDIA_URL = '/media/'
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "%(levelname)s %(message)s"},
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "simple"},
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "propagate": True,
         },
     },
 }
 
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+DATABASE_ROUTERS = ["PinguBackend.db_router.DatabaseRouter"]
 
 
+TMP_FOLDER = "./tmp/cache"
+
+CACHE_PATH = "./tmp/cache"
+
+if not os.path.exists(CACHE_PATH):
+    os.makedirs(CACHE_PATH)
+
+
+
+ASGI_APPLICATION = "PinguBackend.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}

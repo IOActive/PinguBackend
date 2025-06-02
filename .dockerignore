@@ -1,0 +1,9 @@
+.bootstrapped
+.git
+.gitignore
+*.md
+__pycache__
+*.pyc
+venv/
+.env
+src/PinguApi/migrations/

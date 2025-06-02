@@ -13,6 +13,9 @@
 # limitations under the License.
 
 # ENVIRONMENT = 'local'
+import sys
+
+
 ENVIRONMENT = 'development'
 # ENVIRONMENT = 'production'
 
@@ -26,3 +29,15 @@ if ENVIRONMENT == 'development':
     SETTINGS_MODULE = 'PinguBackend.settings.development'
 if ENVIRONMENT == 'production':
     SETTINGS_MODULE = 'PinguBackend.settings.production'
+
+def platform():
+    """Return the operating system type, unless an override is provided."""
+
+    if sys.platform.startswith('win'):
+        return 'WINDOWS'
+    if sys.platform.startswith('linux'):
+        return 'LINUX'
+    if sys.platform == 'darwin':
+        return 'MAC'
+
+    raise ValueError('Unsupported platform "%s".' % sys.platform)

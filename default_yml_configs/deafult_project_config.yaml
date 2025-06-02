@@ -1,0 +1,96 @@
+blobs:
+  # Bucket to store blobs, e.g. testcases, fuzzer archives, etc.
+  bucket: test-blobs-bucket
+
+deployment:
+  # Bucket to store deployment artifacts, e.g. source archives, etc.
+  bucket: test-deployment-bucket
+
+bigquery:
+  # Bucket to store bigquery artifacts, e.g. crash stats, etc.
+  bucket: test-bigquery-bucket
+
+backup:
+  # Bucket to store backup artifacts, e.g. datastore data (backup cron), etc.
+  bucket: test-backup-bucket
+
+coverage:
+  # Bucket to load code coverage information from.
+  bucket: test-coverage-bucket
+
+fuzzers:
+  # Bucket to store fuzzers
+  bucket: test-fuzzers-bucket
+  
+# Multiple type of Build Buckets base on the code nature
+build:
+  release:
+    bucket: test-release-build-bucket
+  sym-release: 
+    bucket: test-sym-release-build-bucket
+  sym-debug:
+    bucket: test-sym-debug-build-bucket
+  stable-build:
+    bucket: test-stable-build-bucket
+  beta-build:
+    bucket: test-beta-build-bucket
+
+corpus:
+  # Bucket to store corpus / useful testcases found during fuzzing. This has sub-directories
+  # for each fuzzer, but not for jobs. So, unless you override this in a job definition, a fuzzer
+  # across different jobs share the same corpus (e.g. useful for different fuzzing engines to
+  # cross-pollinate the corpus).
+  bucket: test-corpus-bucket
+
+quarantine:
+  # Bucket to store quarantined corpus items. These items prevent fuzzer from making
+  # progress during fuzzing (e.g. crashes, timeout, etc), so we automatically quarantine them once
+  # they sneak into the corpus somehow. Once the bugs are fixed, items from quarantine are brought
+  # back into the main corpus bucket.
+  bucket: test-quarantine-bucket
+
+shared-corpus:
+  # Bucket to store shared corpus across all job types. This is planned for future cross
+  # pollination with other data sources on the web.
+  bucket: test-shared-corpus-bucket
+
+mutator-plugins:
+  # Bucket to store mutator plugins.
+  bucket: test-mutator-plugins-bucket
+
+dataflow-builds:
+  # Bucket to store dataflow builds
+  bucket: test-dataflow-builds-bucket
+
+logs:
+  fuzzer:
+    # Bucket to store logs for fuzzer runs.
+    bucket: test-fuzzer-logs-bucket
+  bot:
+    # Bucket to store bot execution logs
+    bucket: test-bots-logs-bucket
+
+dictionaries:
+  # Bucket to store dictionaries
+  bucket: test-dictionaries-bucket
+
+monitoring:
+  # Flag to indicate if Stackdriver monitoring is enabled or not (disabled by default).
+  enabled: false
+
+stacktrace:
+  # Stack frames to ignore when determining the crash signature.
+  stack_frame_ignore_regexes:
+
+  # Stacks to ignore from being considered as a crash altogether.
+  stack_blacklist_regexes:
+
+# Suffix to append to automatically created buckets.
+# bucket_domain_suffix: bucket.suffix
+
+env:
+  # Application ID the Project. In production, this will have a s~ prefix.
+  APPLICATION_ID: test-bot
+
+  # Default project name unless overridden in a job definition.
+  PROJECT_NAME: test-project

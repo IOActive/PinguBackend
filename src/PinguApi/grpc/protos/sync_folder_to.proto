@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package storage;
+
+message File {
+    string filename = 1;
+    string project_id = 2;
+    string fuzz_target_id = 3;
+    bytes data = 4;
+    bool is_last_file = 5;  // Add this field to signal the last file
+}
+
+message SyncStatus {
+    string filename = 1;
+    bool success = 2;
+    string message = 3;
+}
+
+service StorageService {
+    rpc SyncFolderTo (stream File) returns (stream SyncStatus);
+}

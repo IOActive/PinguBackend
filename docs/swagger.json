@@ -1,0 +1,3552 @@
+swagger: '2.0'
+info:
+  title: Snippets API
+  description: Test description
+  termsOfService: https://www.google.com/policies/terms/
+  contact:
+    email: contact@snippets.local
+  license:
+    name: BSD License
+  version: v1
+host: localhost:8086
+schemes:
+- http
+basePath: /api
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  Basic:
+    type: basic
+security:
+- Basic: []
+paths:
+  /api-token-auth/:
+    post:
+      operationId: api-token-auth_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AuthToken'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/AuthToken'
+      tags:
+      - api-token-auth
+    parameters: []
+  /auth/login/:
+    post:
+      operationId: auth_login_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Login'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Login'
+      tags:
+      - auth
+    parameters: []
+  /auth/refresh/:
+    post:
+      operationId: auth_refresh_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TokenRefresh'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TokenRefresh'
+      tags:
+      - auth
+    parameters: []
+  /auth/register/:
+    post:
+      operationId: auth_register_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Register'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Register'
+      tags:
+      - auth
+    parameters: []
+  /bot/:
+    get:
+      operationId: bot_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Bot'
+      tags:
+      - bot
+    post:
+      operationId: bot_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Bot'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Bot'
+      tags:
+      - bot
+    parameters: []
+  /bot/{id}/:
+    patch:
+      operationId: bot_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Bot'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Bot'
+      tags:
+      - bot
+    delete:
+      operationId: bot_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - bot
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this bot.
+      required: true
+      type: string
+      format: uuid
+  /botconfig/:
+    get:
+      operationId: botconfig_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/BotConfig'
+      tags:
+      - botconfig
+    post:
+      operationId: botconfig_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/BotConfig'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/BotConfig'
+      tags:
+      - botconfig
+    parameters: []
+  /botconfig/{id}/:
+    patch:
+      operationId: botconfig_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/BotConfig'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/BotConfig'
+      tags:
+      - botconfig
+    delete:
+      operationId: botconfig_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - botconfig
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this bot config.
+      required: true
+      type: string
+      format: uuid
+  /build/:
+    get:
+      operationId: build_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Build'
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - build
+    post:
+      operationId: build_create
+      description: ''
+      parameters:
+      - name: type
+        in: formData
+        required: false
+        type: string
+        enum:
+        - Release
+        - SYM_Release
+        - SYM_Debug
+        - Stable
+        - Beta
+        - NA
+      - name: build_zip
+        in: formData
+        required: false
+        type: file
+        x-nullable: true
+      - name: filename
+        in: formData
+        required: false
+        type: string
+        default: ''
+        maxLength: 50
+        minLength: 1
+      - name: file_size
+        in: formData
+        required: false
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      - name: blobstore_path
+        in: formData
+        required: false
+        type: string
+        maxLength: 200
+        x-nullable: true
+      - name: project_id
+        in: formData
+        required: false
+        type: string
+        format: uuid
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Build'
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - build
+    parameters: []
+  /build/{id}/:
+    patch:
+      operationId: build_partial_update
+      description: ''
+      parameters:
+      - name: type
+        in: formData
+        required: false
+        type: string
+        enum:
+        - Release
+        - SYM_Release
+        - SYM_Debug
+        - Stable
+        - Beta
+        - NA
+      - name: build_zip
+        in: formData
+        required: false
+        type: file
+        x-nullable: true
+      - name: filename
+        in: formData
+        required: false
+        type: string
+        default: ''
+        maxLength: 50
+        minLength: 1
+      - name: file_size
+        in: formData
+        required: false
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      - name: blobstore_path
+        in: formData
+        required: false
+        type: string
+        maxLength: 200
+        x-nullable: true
+      - name: project_id
+        in: formData
+        required: false
+        type: string
+        format: uuid
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Build'
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - build
+    delete:
+      operationId: build_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - build
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this build.
+      required: true
+      type: string
+      format: uuid
+  /build/{id}/download/:
+    get:
+      operationId: build_download_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - build
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+  /buildmetadata/:
+    get:
+      operationId: buildmetadata_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/BuildMetadata'
+      tags:
+      - buildmetadata
+    post:
+      operationId: buildmetadata_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/BuildMetadata'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/BuildMetadata'
+      tags:
+      - buildmetadata
+    parameters: []
+  /buildmetadata/{id}/:
+    patch:
+      operationId: buildmetadata_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/BuildMetadata'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/BuildMetadata'
+      tags:
+      - buildmetadata
+    delete:
+      operationId: buildmetadata_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - buildmetadata
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this build metadata.
+      required: true
+      type: string
+      format: uuid
+  /corpus/:
+    post:
+      operationId: corpus_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - corpus
+    parameters: []
+  /coverage/:
+    get:
+      operationId: coverage_list
+      description: This view is used to explore coverage data for a project. Returns
+        a JSON object which contains the html reports encoded as base64.
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+      - coverage
+    parameters: []
+  /coverage/{id}/download/:
+    get:
+      operationId: coverage_download_list
+      description: Zips all files in the tmp folder and returns the zip
+      parameters:
+      - name: artifacts
+        in: query
+        description: Coverage Artifacts
+        required: false
+        type: boolean
+      - name: report
+        in: query
+        description: Report name
+        required: false
+        type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+      - coverage
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+  /crash/:
+    get:
+      operationId: crash_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Crash'
+      tags:
+      - crash
+    post:
+      operationId: crash_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Crash'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Crash'
+      tags:
+      - crash
+    parameters: []
+  /crash/{id}/:
+    patch:
+      operationId: crash_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Crash'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Crash'
+      tags:
+      - crash
+    delete:
+      operationId: crash_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - crash
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this crash.
+      required: true
+      type: string
+      format: uuid
+  /crash_stats/:
+    get:
+      operationId: crash_stats_list
+      description: ''
+      parameters:
+      - name: start_date
+        in: query
+        description: 'Start time for filtering (format: YYYY-MM-DD HH:MM:SS)'
+        required: false
+        type: string
+      - name: end_date
+        in: query
+        description: 'End time for filtering (format: YYYY-MM-DD HH:MM:SS)'
+        required: false
+        type: string
+      - name: interval
+        in: query
+        description: Time interval for bucketing (e.g., '1 hour', '1 day')
+        required: false
+        type: string
+      - name: group_by
+        in: query
+        description: Fields to group by (comma-separated list)
+        required: true
+        type: array
+        items:
+          type: string
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CrashStats'
+      tags:
+      - crash_stats
+    post:
+      operationId: crash_stats_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CrashStats'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/CrashStats'
+      tags:
+      - crash_stats
+    parameters: []
+  /custom_binary/:
+    post:
+      operationId: custom_binary_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - custom_binary
+    delete:
+      operationId: custom_binary_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - custom_binary
+    parameters: []
+  /databundle/:
+    get:
+      operationId: databundle_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/DataBundle'
+      tags:
+      - databundle
+    post:
+      operationId: databundle_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DataBundle'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/DataBundle'
+      tags:
+      - databundle
+    parameters: []
+  /databundle/{id}/:
+    patch:
+      operationId: databundle_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DataBundle'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/DataBundle'
+      tags:
+      - databundle
+    delete:
+      operationId: databundle_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - databundle
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this data bundle.
+      required: true
+      type: string
+      format: uuid
+  /fuzzer/:
+    get:
+      operationId: fuzzer_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Fuzzer'
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - fuzzer
+    post:
+      operationId: fuzzer_create
+      description: ''
+      parameters:
+      - name: name
+        in: formData
+        required: true
+        type: string
+        maxLength: 50
+        minLength: 1
+      - name: filename
+        in: formData
+        required: false
+        type: string
+        maxLength: 50
+        x-nullable: true
+      - name: file_size
+        in: formData
+        required: false
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      - name: fuzzer_zip
+        in: formData
+        required: false
+        type: file
+        x-nullable: true
+      - name: blobstore_path
+        in: formData
+        required: false
+        type: string
+        maxLength: 200
+        x-nullable: true
+      - name: executable_path
+        in: formData
+        required: false
+        type: string
+        maxLength: 200
+        x-nullable: true
+      - name: revision
+        in: formData
+        required: false
+        type: number
+      - name: timeout
+        in: formData
+        required: false
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      - name: supported_platforms
+        in: formData
+        required: false
+        type: string
+        enum:
+        - Android
+        - Linux
+        - Mac
+        - Windows
+        - NA
+      - name: launcher_script
+        in: formData
+        required: false
+        type: string
+        maxLength: 200
+        x-nullable: true
+      - name: result
+        in: formData
+        required: false
+        type: string
+        x-nullable: true
+      - name: result_timestamp
+        in: formData
+        required: false
+        type: string
+        format: date-time
+        x-nullable: true
+      - name: console_output
+        in: formData
+        required: false
+        type: string
+        x-nullable: true
+      - name: return_code
+        in: formData
+        required: false
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      - name: sample_testcase
+        in: formData
+        required: false
+        type: string
+        x-nullable: true
+      - name: max_testcases
+        in: formData
+        required: false
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      - name: untrusted_content
+        in: formData
+        required: false
+        type: boolean
+      - name: additional_environment_string
+        in: formData
+        required: false
+        type: string
+        maxLength: 500
+        x-nullable: true
+      - name: stats_columns
+        in: formData
+        required: false
+        type: string
+        x-nullable: true
+      - name: stats_column_descriptions
+        in: formData
+        required: false
+        type: string
+        x-nullable: true
+      - name: builtin
+        in: formData
+        required: false
+        type: boolean
+      - name: differential
+        in: formData
+        required: false
+        type: boolean
+      - name: has_large_testcases
+        in: formData
+        required: false
+        type: boolean
+      - name: data_bundle_name
+        in: formData
+        required: false
+        type: string
+        maxLength: 50
+        x-nullable: true
+      - name: install_script
+        in: formData
+        required: false
+        type: string
+        maxLength: 200
+        x-nullable: true
+      - name: project_id
+        in: formData
+        required: false
+        type: string
+        format: uuid
+        x-nullable: true
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Fuzzer'
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - fuzzer
+    parameters: []
+  /fuzzer/{id}/:
+    patch:
+      operationId: fuzzer_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Fuzzer'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Fuzzer'
+      tags:
+      - fuzzer
+    delete:
+      operationId: fuzzer_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - fuzzer
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this fuzzer.
+      required: true
+      type: string
+      format: uuid
+  /fuzzer/{id}/download:
+    get:
+      operationId: fuzzer_download_list
+      description: This view is used to explore coverage data for a project. Returns
+        a JSON object which contains the html reports encoded as base64.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - fuzzer
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+  /fuzzer_stats/:
+    get:
+      operationId: fuzzer_stats_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/FuzzerStats'
+      tags:
+      - fuzzer_stats
+    post:
+      operationId: fuzzer_stats_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FuzzerStats'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/FuzzerStats'
+      tags:
+      - fuzzer_stats
+    parameters: []
+  /fuzztarget/:
+    get:
+      operationId: fuzztarget_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/FuzzTarget'
+      tags:
+      - fuzztarget
+    post:
+      operationId: fuzztarget_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FuzzTarget'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/FuzzTarget'
+      tags:
+      - fuzztarget
+    parameters: []
+  /fuzztarget/{id}/:
+    patch:
+      operationId: fuzztarget_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FuzzTarget'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FuzzTarget'
+      tags:
+      - fuzztarget
+    delete:
+      operationId: fuzztarget_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - fuzztarget
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this fuzz target.
+      required: true
+      type: string
+      format: uuid
+  /fuzztargetjob/:
+    get:
+      operationId: fuzztargetjob_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/FuzzTargetJob'
+      tags:
+      - fuzztargetjob
+    post:
+      operationId: fuzztargetjob_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FuzzTargetJob'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/FuzzTargetJob'
+      tags:
+      - fuzztargetjob
+    parameters: []
+  /fuzztargetjob/{id}/:
+    patch:
+      operationId: fuzztargetjob_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FuzzTargetJob'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FuzzTargetJob'
+      tags:
+      - fuzztargetjob
+    delete:
+      operationId: fuzztargetjob_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - fuzztargetjob
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this fuzz target job.
+      required: true
+      type: string
+      format: uuid
+  /job/:
+    get:
+      operationId: job_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Job'
+      tags:
+      - job
+    post:
+      operationId: job_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Job'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Job'
+      tags:
+      - job
+    parameters: []
+  /job/{id}/:
+    patch:
+      operationId: job_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Job'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Job'
+      tags:
+      - job
+    delete:
+      operationId: job_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - job
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this job.
+      required: true
+      type: string
+      format: uuid
+  /jobtemplate/:
+    get:
+      operationId: jobtemplate_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JobTemplate'
+      tags:
+      - jobtemplate
+    post:
+      operationId: jobtemplate_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/JobTemplate'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/JobTemplate'
+      tags:
+      - jobtemplate
+    parameters: []
+  /jobtemplate/{id}/:
+    patch:
+      operationId: jobtemplate_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/JobTemplate'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/JobTemplate'
+      tags:
+      - jobtemplate
+    delete:
+      operationId: jobtemplate_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - jobtemplate
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this job template.
+      required: true
+      type: string
+      format: uuid
+  /project/:
+    get:
+      operationId: project_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Project'
+      tags:
+      - project
+    post:
+      operationId: project_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Project'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Project'
+      tags:
+      - project
+    parameters: []
+  /project/{id}/:
+    patch:
+      operationId: project_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Project'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Project'
+      tags:
+      - project
+    delete:
+      operationId: project_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - project
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this project.
+      required: true
+      type: string
+      format: uuid
+  /stadistics/:
+    get:
+      operationId: stadistics_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Statistic'
+      tags:
+      - stadistics
+    post:
+      operationId: stadistics_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Statistic'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Statistic'
+      tags:
+      - stadistics
+    parameters: []
+  /stadistics/{id}/:
+    patch:
+      operationId: stadistics_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Statistic'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Statistic'
+      tags:
+      - stadistics
+    delete:
+      operationId: stadistics_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - stadistics
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this statistic.
+      required: true
+      type: string
+      format: uuid
+  /storage/blobs/delete/:
+    delete:
+      operationId: storage_blobs_delete_delete
+      description: ''
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: key
+        in: query
+        description: Blob key name
+        required: true
+        type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - storage
+    parameters: []
+  /storage/blobs/download/:
+    get:
+      operationId: storage_blobs_download_list
+      description: ''
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: key
+        in: query
+        description: Blob key name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+      - storage
+    parameters: []
+  /storage/blobs/read/:
+    get:
+      operationId: storage_blobs_read_list
+      description: ''
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: key
+        in: query
+        description: Blob key name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+      - storage
+    parameters: []
+  /storage/blobs/upload/:
+    post:
+      operationId: storage_blobs_upload_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - storage
+    parameters: []
+  /storage/builds/download/:
+    post:
+      operationId: storage_builds_download_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - storage
+    parameters: []
+  /storage/builds/list/:
+    get:
+      operationId: storage_builds_list_list
+      description: Get build list
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: build_type
+        in: query
+        description: Build type
+        required: true
+        type: string
+      - name: file_path
+        in: query
+        description: File path
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Build list retrieved successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      tags:
+      - storage
+    parameters: []
+  /storage/builds/size/:
+    get:
+      operationId: storage_builds_size_list
+      description: Get build size
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: build_type
+        in: query
+        description: Build type
+        required: true
+        type: string
+      - name: file_path
+        in: query
+        description: File path
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Build size retrieved successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      tags:
+      - storage
+    parameters: []
+  /storage/corpus/download/:
+    get:
+      operationId: storage_corpus_download_list
+      description: ''
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: fuzz_target_id
+        in: query
+        description: Fuzz Target ID
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+      - storage
+    parameters: []
+  /storage/corpus/upload/:
+    post:
+      operationId: storage_corpus_upload_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - storage
+    parameters: []
+  /storage/coverage/upload/:
+    post:
+      operationId: storage_coverage_upload_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - storage
+    parameters: []
+  /storage/dictionaries/download/:
+    get:
+      operationId: storage_dictionaries_download_list
+      description: Download dictionary
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: fuzztarget_id
+        in: query
+        description: Fuzz Target ID
+        required: true
+        type: string
+      - name: dictionary_name
+        in: query
+        description: Dictionary name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Dictionary downloaded successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      tags:
+      - storage
+    parameters: []
+  /storage/dictionaries/exists/:
+    get:
+      operationId: storage_dictionaries_exists_list
+      description: Check if dictionary exists
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: fuzztarget_id
+        in: query
+        description: Fuzz Target ID
+        required: true
+        type: string
+      - name: dictionary_name
+        in: query
+        description: Dictionary name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Dictionary exists
+        '404':
+          description: Dictionary not found
+      tags:
+      - storage
+    parameters: []
+  /storage/dictionaries/list/:
+    get:
+      operationId: storage_dictionaries_list_list
+      description: List dictionaries
+      parameters:
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: fuzztarget_id
+        in: query
+        description: Fuzz Target ID
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Dictionaries listed successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      tags:
+      - storage
+    parameters: []
+  /storage/dictionaries/upload/:
+    post:
+      operationId: storage_dictionaries_upload_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - storage
+    parameters: []
+  /storage/logs/download/:
+    get:
+      operationId: storage_logs_download_list
+      description: Download logs
+      parameters:
+      - name: log_type
+        in: query
+        description: Type of log (bot or fuzzer)
+        required: true
+        type: string
+      - name: job_id
+        in: query
+        description: Job ID
+        required: true
+        type: string
+      - name: task_id
+        in: query
+        description: Task ID
+        required: false
+        type: string
+      - name: fuzzer_id
+        in: query
+        description: Fuzzer ID
+        required: false
+        type: string
+      - name: project_id
+        in: query
+        description: Project ID
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Logs downloaded successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '406':
+          description: Not acceptable
+        '500':
+          description: Internal server error
+      tags:
+      - storage
+    parameters: []
+  /storage/logs/upload/:
+    post:
+      operationId: storage_logs_upload_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - storage
+    parameters: []
+  /storage/stats/upload/:
+    post:
+      operationId: storage_stats_upload_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      tags:
+      - storage
+    parameters: []
+  /task/:
+    get:
+      operationId: task_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Task'
+      tags:
+      - task
+    post:
+      operationId: task_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Task'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Task'
+      tags:
+      - task
+    parameters: []
+  /task/{id}/:
+    patch:
+      operationId: task_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Task'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Task'
+      tags:
+      - task
+    delete:
+      operationId: task_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - task
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this task.
+      required: true
+      type: string
+      format: uuid
+  /testcase/:
+    get:
+      operationId: testcase_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/TestCase'
+      tags:
+      - testcase
+    post:
+      operationId: testcase_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TestCase'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TestCase'
+      tags:
+      - testcase
+    parameters: []
+  /testcase/{id}/:
+    patch:
+      operationId: testcase_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TestCase'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/TestCase'
+      tags:
+      - testcase
+    delete:
+      operationId: testcase_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - testcase
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this test case.
+      required: true
+      type: string
+      format: uuid
+  /testcasevariant/:
+    get:
+      operationId: testcasevariant_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/TestCaseVariant'
+      tags:
+      - testcasevariant
+    post:
+      operationId: testcasevariant_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TestCaseVariant'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TestCaseVariant'
+      tags:
+      - testcasevariant
+    parameters: []
+  /testcasevariant/{id}/:
+    patch:
+      operationId: testcasevariant_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TestCaseVariant'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/TestCaseVariant'
+      tags:
+      - testcasevariant
+    delete:
+      operationId: testcasevariant_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - testcasevariant
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this test case variant.
+      required: true
+      type: string
+      format: uuid
+  /token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TokenObtainPair'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TokenObtainPair'
+      tags:
+      - token
+    parameters: []
+  /token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TokenRefresh'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TokenRefresh'
+      tags:
+      - token
+    parameters: []
+  /trial/:
+    get:
+      operationId: trial_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Trial'
+      tags:
+      - trial
+    post:
+      operationId: trial_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Trial'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Trial'
+      tags:
+      - trial
+    parameters: []
+  /trial/{id}/:
+    patch:
+      operationId: trial_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Trial'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Trial'
+      tags:
+      - trial
+    delete:
+      operationId: trial_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - trial
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this trial.
+      required: true
+      type: string
+      format: uuid
+definitions:
+  AuthToken:
+    required:
+    - username
+    - password
+    type: object
+    properties:
+      username:
+        title: Username
+        type: string
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        minLength: 1
+      token:
+        title: Token
+        type: string
+        readOnly: true
+        minLength: 1
+  Login:
+    required:
+    - username
+    - password
+    type: object
+    properties:
+      username:
+        title: Username
+        type: string
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        minLength: 1
+  TokenRefresh:
+    required:
+    - refresh
+    type: object
+    properties:
+      refresh:
+        title: Refresh
+        type: string
+        minLength: 1
+      access:
+        title: Access
+        type: string
+        readOnly: true
+        minLength: 1
+  Register:
+    required:
+    - username
+    - email
+    - password
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      email:
+        title: Email
+        type: string
+        format: email
+        maxLength: 128
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 8
+      is_active:
+        title: Active
+        description: Designates whether this user should be treated as active. Unselect
+          this instead of deleting accounts.
+        type: boolean
+  Bot:
+    required:
+    - name
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 40
+        minLength: 1
+      last_beat_time:
+        title: Last beat time
+        type: string
+        format: date-time
+        x-nullable: true
+      platform:
+        title: Platform
+        type: string
+        enum:
+        - Android
+        - Linux
+        - Mac
+        - Windows
+        - NA
+      current_task_id:
+        title: Current task id
+        type: string
+        format: uuid
+  BotConfig:
+    required:
+    - config_data
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      config_data:
+        title: Config data
+        type: string
+        minLength: 1
+      bot_id:
+        title: Bot id
+        type: string
+        format: uuid
+  Build:
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+        default: d17624c0-4c10-4371-9283-504263fa3f23
+      type:
+        title: Type
+        type: string
+        enum:
+        - Release
+        - SYM_Release
+        - SYM_Debug
+        - Stable
+        - Beta
+        - NA
+      build_zip:
+        title: Build zip
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+      filename:
+        title: Filename
+        type: string
+        default: ''
+        maxLength: 50
+        minLength: 1
+      file_size:
+        title: File size
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      timestamp:
+        title: Timestamp
+        type: string
+        format: date-time
+        readOnly: true
+      blobstore_path:
+        title: Blobstore path
+        type: string
+        maxLength: 200
+        x-nullable: true
+      project_id:
+        title: Project id
+        type: string
+        format: uuid
+  BuildMetadata:
+    required:
+    - bot_name
+    - timestamp
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      job_id:
+        title: Job id
+        type: string
+        format: uuid
+        readOnly: true
+      revision:
+        title: Revision
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      bad_build:
+        title: Bad build
+        type: boolean
+      console_output:
+        title: Console output
+        type: string
+        maxLength: 20000
+        x-nullable: true
+      bot_name:
+        title: Bot name
+        type: string
+        maxLength: 20
+        minLength: 1
+      symbols:
+        title: Symbols
+        type: string
+        maxLength: 20000
+        x-nullable: true
+      timestamp:
+        title: Timestamp
+        type: string
+        format: date-time
+  Crash:
+    required:
+    - testcase_id
+    - crash_signal
+    - crash_time
+    - crash_hash
+    - iteration
+    - crash_type
+    - crash_state
+    - crash_stacktrace
+    - absolute_path
+    - security_flag
+    - return_code
+    - fuzzing_strategy
+    - unsymbolized_crash_stacktrace
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      testcase_id:
+        title: Testcase id
+        type: string
+        format: uuid
+      crash_signal:
+        title: Crash signal
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      exploitability:
+        title: Exploitability
+        type: string
+        maxLength: 50
+        x-nullable: true
+      crash_time:
+        title: Crash time
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      crash_hash:
+        title: Crash hash
+        type: string
+        maxLength: 512
+        minLength: 1
+      verified:
+        title: Verified
+        type: boolean
+      additional:
+        title: Additional
+        type: string
+        x-nullable: true
+      iteration:
+        title: Iteration
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      crash_type:
+        title: Crash type
+        type: string
+        maxLength: 50
+        minLength: 1
+      crash_address:
+        title: Crash address
+        type: string
+        maxLength: 50
+        x-nullable: true
+      crash_state:
+        title: Crash state
+        type: string
+        minLength: 1
+      crash_stacktrace:
+        title: Crash stacktrace
+        type: string
+        minLength: 1
+      security_severity:
+        title: Security severity
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+        x-nullable: true
+      absolute_path:
+        title: Absolute path
+        type: string
+        minLength: 1
+      security_flag:
+        title: Security flag
+        type: boolean
+      reproducible_flag:
+        title: Reproducible flag
+        type: boolean
+      return_code:
+        title: Return code
+        type: string
+        maxLength: 50
+        minLength: 1
+      gestures:
+        title: Gestures
+        type: object
+        x-nullable: true
+      resource_list:
+        title: Resource list
+        type: object
+        x-nullable: true
+      fuzzing_strategy:
+        title: Fuzzing strategy
+        type: object
+      should_be_ignored:
+        title: Should be ignored
+        type: boolean
+      application_command_line:
+        title: Application command line
+        type: string
+        x-nullable: true
+      unsymbolized_crash_stacktrace:
+        title: Unsymbolized crash stacktrace
+        type: string
+        minLength: 1
+      crash_frame:
+        title: Crash frame
+        type: object
+        x-nullable: true
+      crash_info:
+        title: Crash info
+        type: string
+        maxLength: 200
+        x-nullable: true
+      crash_revision:
+        title: Crash revision
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+  CrashStats:
+    required:
+    - fuzzer_id
+    - project_id
+    - job_id
+    - crash_type
+    - crash_state
+    - security_flag
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      fuzzer_id:
+        title: Fuzzer id
+        type: string
+        format: uuid
+      project_id:
+        title: Project id
+        type: string
+        format: uuid
+      job_id:
+        title: Job id
+        type: string
+        format: uuid
+      testcase_id:
+        title: Testcase id
+        type: string
+        format: uuid
+        x-nullable: true
+      crash_id:
+        title: Crash id
+        type: string
+        format: uuid
+        x-nullable: true
+      crash_type:
+        title: Crash type
+        type: string
+        maxLength: 50
+        minLength: 1
+      crash_state:
+        title: Crash state
+        type: string
+        minLength: 1
+      security_flag:
+        title: Security flag
+        type: boolean
+      reproducible_flag:
+        title: Reproducible flag
+        type: boolean
+      revision:
+        title: Revision
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      new_flag:
+        title: New flag
+        type: boolean
+      platform:
+        title: Platform
+        type: string
+        enum:
+        - Android
+        - Linux
+        - Mac
+        - Windows
+        - NA
+      crash_time_in_ms:
+        title: Crash time in ms
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+  DataBundle:
+    required:
+    - name
+    - bucket_name
+    - timestamp
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      bucket_name:
+        title: Bucket name
+        type: string
+        maxLength: 50
+        minLength: 1
+      source:
+        title: Source
+        type: string
+        maxLength: 50
+        x-nullable: true
+      is_local:
+        title: Is local
+        type: boolean
+      timestamp:
+        title: Timestamp
+        type: string
+        format: date-time
+      sync_to_worker:
+        title: Sync to worker
+        type: boolean
+  Fuzzer:
+    required:
+    - name
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      timestamp:
+        title: Timestamp
+        type: string
+        format: date-time
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      filename:
+        title: Filename
+        type: string
+        maxLength: 50
+        x-nullable: true
+      file_size:
+        title: File size
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      fuzzer_zip:
+        title: Fuzzer zip
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+      blobstore_path:
+        title: Blobstore path
+        type: string
+        maxLength: 200
+        x-nullable: true
+      executable_path:
+        title: Executable path
+        type: string
+        maxLength: 200
+        x-nullable: true
+      revision:
+        title: Revision
+        type: number
+      timeout:
+        title: Timeout
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      supported_platforms:
+        title: Supported platforms
+        type: string
+        enum:
+        - Android
+        - Linux
+        - Mac
+        - Windows
+        - NA
+      launcher_script:
+        title: Launcher script
+        type: string
+        maxLength: 200
+        x-nullable: true
+      result:
+        title: Result
+        type: string
+        x-nullable: true
+      result_timestamp:
+        title: Result timestamp
+        type: string
+        format: date-time
+        x-nullable: true
+      console_output:
+        title: Console output
+        type: string
+        x-nullable: true
+      return_code:
+        title: Return code
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      sample_testcase:
+        title: Sample testcase
+        type: string
+        x-nullable: true
+      max_testcases:
+        title: Max testcases
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      untrusted_content:
+        title: Untrusted content
+        type: boolean
+      additional_environment_string:
+        title: Additional environment string
+        type: string
+        maxLength: 500
+        x-nullable: true
+      stats_columns:
+        title: Stats columns
+        type: object
+        x-nullable: true
+      stats_column_descriptions:
+        title: Stats column descriptions
+        type: object
+        x-nullable: true
+      builtin:
+        title: Builtin
+        type: boolean
+      differential:
+        title: Differential
+        type: boolean
+      has_large_testcases:
+        title: Has large testcases
+        type: boolean
+      data_bundle_name:
+        title: Data bundle name
+        type: string
+        maxLength: 50
+        x-nullable: true
+      install_script:
+        title: Install script
+        type: string
+        maxLength: 200
+        x-nullable: true
+      project_id:
+        title: Project id
+        type: string
+        format: uuid
+        x-nullable: true
+      download_url:
+        title: Download url
+        type: string
+        readOnly: true
+  FuzzerStats:
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      fuzz_target:
+        title: Fuzz target
+        type: string
+        format: uuid
+        x-nullable: true
+      start_date:
+        title: Start date
+        description: Start date for the filter
+        type: string
+        minLength: 1
+      end_date:
+        title: End date
+        description: End date for the filter
+        type: string
+        minLength: 1
+      group_by:
+        title: Group by
+        description: Field to group by
+        type: string
+        minLength: 1
+      interval:
+        title: Interval
+        description: Field to select time bucket size
+        type: string
+        minLength: 1
+  FuzzTarget:
+    required:
+    - fuzzer_id
+    - project_id
+    - binary
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      fuzzer_id:
+        title: Fuzzer id
+        type: string
+        format: uuid
+      project_id:
+        title: Project id
+        type: string
+        format: uuid
+      binary:
+        title: Binary
+        type: string
+        maxLength: 50
+        minLength: 1
+  FuzzTargetJob:
+    required:
+    - fuzz_target_id
+    - job_id
+    - fuzzer_id
+    - last_run
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      fuzz_target_id:
+        title: Fuzz target id
+        type: string
+        format: uuid
+      job_id:
+        title: Job id
+        type: string
+        format: uuid
+      fuzzer_id:
+        title: Fuzzer id
+        type: string
+        format: uuid
+      weight:
+        title: Weight
+        type: number
+      last_run:
+        title: Last run
+        type: string
+        format: date-time
+  Job:
+    required:
+    - name
+    - description
+    - date
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 400
+        minLength: 1
+      template_id:
+        title: Template id
+        type: string
+        format: uuid
+      date:
+        title: Date
+        type: string
+        format: date-time
+      enabled:
+        title: Enabled
+        type: boolean
+      archived:
+        title: Archived
+        type: boolean
+      platform:
+        title: Platform
+        type: string
+        enum:
+        - Android
+        - Linux
+        - Mac
+        - Windows
+        - NA
+      environment_string:
+        title: Environment string
+        type: string
+        maxLength: 2000
+      project_id:
+        title: Project id
+        type: string
+        format: uuid
+      custom_binary_path:
+        title: Custom binary path
+        type: string
+        maxLength: 500
+        x-nullable: true
+      custom_binary_filename:
+        title: Custom binary filename
+        type: string
+        maxLength: 50
+        x-nullable: true
+      custom_binary_revision:
+        title: Custom binary revision
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+        x-nullable: true
+      custom_binary_key:
+        title: Custom binary key
+        type: string
+        maxLength: 50
+        x-nullable: true
+  JobTemplate:
+    required:
+    - name
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+        default: 1c771d11-f300-4fcd-bf44-1e028e7d0fe2
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      environment_string:
+        title: Environment string
+        type: string
+        maxLength: 400
+        x-nullable: true
+  Project:
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+      timestamp:
+        title: Timestamp
+        type: string
+        format: date-time
+        readOnly: true
+      configuration:
+        title: Configuration
+        type: string
+  Statistic:
+    required:
+    - job_id
+    - iteration
+    - runtime
+    - execs_per_sec
+    - date
+    - last_beat_time
+    - status
+    - task_payload
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      job_id:
+        title: Job id
+        type: string
+        format: uuid
+      iteration:
+        title: Iteration
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      runtime:
+        title: Runtime
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      execs_per_sec:
+        title: Execs per sec
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      date:
+        title: Date
+        type: string
+        format: date-time
+      last_beat_time:
+        title: Last beat time
+        type: string
+        format: date-time
+      status:
+        title: Status
+        type: string
+        maxLength: 50
+        minLength: 1
+      task_payload:
+        title: Task payload
+        type: string
+        maxLength: 500
+        minLength: 1
+  Task:
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      platform:
+        title: Platform
+        type: string
+        enum:
+        - Android
+        - Linux
+        - Mac
+        - Windows
+        - NA
+      command:
+        title: Command
+        type: string
+        maxLength: 200
+        minLength: 1
+      argument:
+        title: Argument
+        type: string
+        maxLength: 200
+        minLength: 1
+      payload:
+        title: Payload
+        type: string
+        maxLength: 200
+        x-nullable: true
+      end_time:
+        title: End time
+        type: string
+        format: date-time
+        x-nullable: true
+      create_time:
+        title: Create time
+        type: string
+        format: date-time
+        readOnly: true
+      status:
+        title: Status
+        type: string
+        enum:
+        - started
+        - in-progress
+        - finished
+        - errored out
+        - NA
+      bot_log:
+        title: Bot log
+        type: string
+        readOnly: true
+        format: uri
+      heartbeat_log:
+        title: Heartbeat log
+        type: string
+        readOnly: true
+        format: uri
+      run_fuzzer_log:
+        title: Run fuzzer log
+        type: string
+        readOnly: true
+        format: uri
+      run_heartbeat_log:
+        title: Run heartbeat log
+        type: string
+        readOnly: true
+        format: uri
+      job_id:
+        title: Job id
+        type: string
+        format: uuid
+  TestCase:
+    required:
+    - timestamp
+    - job_id
+    - fuzzer_id
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      bug_information:
+        title: Bug information
+        type: string
+        x-nullable: true
+      test_case:
+        title: Test case
+        type: string
+      fixed:
+        title: Fixed
+        type: string
+        maxLength: 50
+      one_time_crasher_flag:
+        title: One time crasher flag
+        type: boolean
+      comments:
+        title: Comments
+        type: string
+      absolute_path:
+        title: Absolute path
+        type: string
+        maxLength: 200
+      queue:
+        title: Queue
+        type: string
+        maxLength: 50
+      archived:
+        title: Archived
+        type: boolean
+      timestamp:
+        title: Timestamp
+        type: string
+        format: date-time
+      status:
+        title: Status
+        type: string
+        enum:
+        - pending
+        - processed
+        - unreproducible
+        - done
+        - duplicated
+      triaged:
+        title: Triaged
+        type: boolean
+      has_bug_flag:
+        title: Has bug flag
+        type: boolean
+      open:
+        title: Open
+        type: boolean
+      testcase_path:
+        title: Testcase path
+        type: string
+        maxLength: 200
+      additional_metadata:
+        title: Additional metadata
+        type: string
+        maxLength: 500
+      fuzzed_keys:
+        title: Fuzzed keys
+        type: string
+        maxLength: 200
+        x-nullable: true
+      minimized_keys:
+        title: Minimized keys
+        type: string
+        maxLength: 200
+        x-nullable: true
+      minidump_keys:
+        title: Minidump keys
+        type: string
+        maxLength: 200
+        x-nullable: true
+      minimized_arguments:
+        title: Minimized arguments
+        type: string
+        maxLength: 200
+        x-nullable: true
+      disable_ubsan:
+        title: Disable ubsan
+        type: boolean
+      regression:
+        title: Regression
+        type: string
+        x-nullable: true
+      timeout_multiplier:
+        title: Timeout multiplier
+        type: number
+      archive_state:
+        title: Archive state
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      redzone:
+        title: Redzone
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      job_id:
+        title: Job id
+        type: string
+        format: uuid
+      fuzzer_id:
+        title: Fuzzer id
+        type: string
+        format: uuid
+  TestCaseVariant:
+    required:
+    - testcase_id
+    - job_id
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      status:
+        title: Status
+        type: integer
+        enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      testcase_id:
+        title: Testcase id
+        type: string
+        format: uuid
+      job_id:
+        title: Job id
+        type: string
+        format: uuid
+      revision:
+        title: Revision
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      crash_type:
+        title: Crash type
+        type: string
+        maxLength: 50
+        minLength: 1
+      crash_state:
+        title: Crash state
+        type: string
+        maxLength: 50
+        minLength: 1
+      security_flag:
+        title: Security flag
+        type: boolean
+      is_similar:
+        title: Is similar
+        type: boolean
+      reproducer_key:
+        title: Reproducer key
+        type: string
+        maxLength: 200
+        minLength: 1
+      platform:
+        title: Platform
+        type: string
+        enum:
+        - Android
+        - Linux
+        - Mac
+        - Windows
+        - NA
+  TokenObtainPair:
+    required:
+    - username
+    - password
+    type: object
+    properties:
+      username:
+        title: Username
+        type: string
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        minLength: 1
+  Trial:
+    required:
+    - app_name
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      app_name:
+        title: App name
+        type: string
+        maxLength: 50
+        minLength: 1
+      probability:
+        title: Probability
+        type: number
+      app_args:
+        title: App args
+        type: string
+        maxLength: 200
+        minLength: 1

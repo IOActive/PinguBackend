@@ -1,0 +1,21 @@
+{
+    "project_id": "ffdad55c-7df4-4ff1-9712-600a5022feeb",
+    "fuzzer_id": "1452527c-7ee2-42c5-a960-a47f8ca1f319",
+    "binary": "fuzzer",
+    "job_id": "5712627a-7462-4a5e-913d-4bad8b66c560",
+    "build_revision": 2,
+    "timestamp": 1737719823.6483421,
+    "kind": "JobRun",
+    "testcases_executed": 0,
+    "new_crashes": 0,
+    "known_crashes": 2,
+    "crashes": [
+        {
+            "is_new": false,
+            "count": 2,
+            "crash_type": "Heap-buffer-overflow\nREAD 1",
+            "crash_state": "/home/roboboy/Projects/pingucrew/test-bot/working_directory/builds/super-release\n/home/roboboy/Projects/pingucrew/test-bot/working_directory/builds/super-release\n/home/roboboy/Projects/pingucrew/test-bot/working_directory/builds/super-release\n",
+            "security_flag": true
+        }
+    ]
+}

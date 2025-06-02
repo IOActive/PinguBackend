@@ -14,7 +14,7 @@
 
 from rest_framework.routers import SimpleRouter
 #from PinguApi.subviews.Authentication_view import UserViewSet
-from PinguApi.subviews.Authentication_view import LoginViewSet, RegistrationViewSet, RefreshViewSet
+from PinguApi.subviews.authentication_view import LoginViewSet, RegistrationViewSet, RefreshViewSet
 
 
 routes = SimpleRouter()

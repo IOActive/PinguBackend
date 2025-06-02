@@ -225,4 +225,6 @@ tests/backend/api/__pycache__/__init__.cpython-310.pyc
 tests/backend/api/__pycache__/__init__.cpython-310.pyc
 PinguBackend/media/tmp/*
 src/tmp/*
-config
+tmp/*
+**/third_party/**
+src/PinguApi/migrations/*

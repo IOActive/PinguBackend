@@ -1,0 +1,85 @@
+services:
+  database:
+    image: timescale/timescaledb:latest-pg16
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/database/database_entrypoint.sh:/usr/local/bin/entrypoint.sh
+      - ./config/database/config.yaml:/etc/pingu/config/database/config.yaml
+      - ./src/scripts/load_config_to_env.py:/load_config_to_env.py
+    networks:
+      - pingu-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    hostname: 'database'
+
+    
+  queue:
+    image: "rabbitmq:3-management"
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+    hostname: 'queue'
+    volumes:
+      - queue:/var/lib/rabbitmq
+      - ./docker/queue/queue_entrypoint.sh:/usr/local/bin/entrypoint.sh
+      - ./config/redis/config.yaml:/etc/pingu/config/redis/config.yaml
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=s3cr3tc00ki3
+    ports: 
+      - '5672:5672'
+      - '15672:15672'
+    logging:
+      driver: none
+    networks:
+      - pingu-network
+
+  minio:
+    build:
+      context: .
+      dockerfile: docker/minio/DockerFile
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+    hostname: 'minio'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio_data:/data
+      - ./docker/minio/minio_entrypoint.sh:/usr/local/bin/entrypoint.sh
+      - ./config/minio/config.yaml:/etc/pingu/config/minio/config.yaml
+      - ./src/scripts/load_config_to_env.py:/load_config_to_env.py
+    command: 'server /data --console-address ":9001"'
+    networks:
+      - pingu-network
+
+  server:
+    build:
+      context: .
+      dockerfile: docker/server/Dockerfile
+    hostname: 'pinguBackend'
+    ports:
+      - "8086:8086"
+    depends_on:
+      - database
+      - queue
+      - minio
+    networks:
+      - pingu-network
+    volumes:
+      - ./config:/pinguBackend/config/
+      - ./tmp/:/pinguBackend/tmp/
+    
+
+networks:
+  pingu-network:
+    driver: bridge
+
+volumes:
+  minio_data:
+  backend_data:
+  postgres_data:
+  queue:
